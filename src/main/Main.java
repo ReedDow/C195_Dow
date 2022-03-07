@@ -1,4 +1,5 @@
 package main;
+
 import javafx.application.Application;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
@@ -11,14 +12,14 @@ public class Main extends Application {
     /**This method loads the initial page and makes the FXML stage.*/
     @Override
     public void start(Stage stage) throws IOException {
-        //addTestData();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Main_form.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         stage.setTitle("Main Form");
-        stage.setScene(new Scene(root, 987, 446 ));
+        stage.setScene(new Scene(root, 600, 335 ));
         stage.show();
     }
 
     public static void main(String[] args){
         launch(args);
+
     }
 }
