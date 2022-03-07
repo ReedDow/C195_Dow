@@ -2,6 +2,8 @@ package main;
 
 import javafx.application.Application;
 import java.io.IOException;
+import java.util.Locale;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,6 +19,10 @@ public class Main extends Application {
         stage.setScene(new Scene(root, 600, 335 ));
         stage.show();
     }
+
+//    public void changeLocale(){
+//        Locale.setDefault(new Locale("fr"));
+//    }
 
     public static void main(String[] args){
         launch(args);
