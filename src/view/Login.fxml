@@ -12,7 +12,7 @@
    <children>
       <TextField fx:id="passwordInput" layoutX="226.0" layoutY="213.0" prefHeight="22.0" prefWidth="149.0" promptText="Password" />
       <TextField fx:id="useridInput" layoutX="226.0" layoutY="155.0" promptText="User Name" />
-      <Label layoutX="179.0" layoutY="43.0" text="Scheduling Plus" textFill="#800000">
+      <Label layoutX="179.0" layoutY="43.0" text="Appointment Pro" textFill="#800000">
          <font>
             <Font size="35.0" />
          </font>

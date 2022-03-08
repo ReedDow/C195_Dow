@@ -70,7 +70,7 @@
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <Button layoutX="682.0" layoutY="34.0" mnemonicParsing="false" onAction="#scheduleClick" text="Go to Schedule"  />
+        <Button layoutX="682.0" layoutY="34.0" mnemonicParsing="false" onAction="#scheduleClick" text="Go to Appointments"  />
         <TableView fx:id="customerTable" layoutX="280.0" layoutY="80.0" prefHeight="310.0" prefWidth="585.0">
             <columns>
                 <TableColumn fx:id="CustIdCol" prefWidth="75.0" text="Customer Id" />
