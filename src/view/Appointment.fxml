@@ -18,29 +18,29 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="749.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="ApptAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"       prefHeight="749.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Appointment">
    <children>
-      <TableView layoutX="337.0" layoutY="97.0" prefHeight="316.0" prefWidth="802.0">
+      <TableView fx:id="ApptTable" layoutX="337.0" layoutY="97.0" prefHeight="316.0" prefWidth="802.0">
         <columns>
-          <TableColumn prefWidth="102.0" text="Appointment ID" />
-          <TableColumn prefWidth="48.0" text="Title" />
-            <TableColumn prefWidth="75.0" text="Description" />
-            <TableColumn prefWidth="75.0" text="Location" />
-            <TableColumn prefWidth="75.0" text="Contact" />
-            <TableColumn prefWidth="75.0" text="Type" />
-            <TableColumn prefWidth="100.0" text="Start Date/Time" />
-            <TableColumn prefWidth="93.0" text="End Date/Time" />
-            <TableColumn prefWidth="82.0" text="Customer ID" />
-            <TableColumn prefWidth="75.0" text="User ID" />
+          <TableColumn fx:id="ApptIdCol" prefWidth="102.0" text="Appointment ID" />
+          <TableColumn fx:id="TitleCol" prefWidth="48.0" text="Title" />
+            <TableColumn fx:id="DescCol" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="LocCol" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="ContactCol" prefWidth="75.0" text="Contact" />
+            <TableColumn fx:id="TypeCol" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="StartCol" prefWidth="100.0" text="Start Date/Time" />
+            <TableColumn fx:id="EndCol" prefWidth="93.0" text="End Date/Time" />
+            <TableColumn fx:id="CustIdCol" prefWidth="82.0" text="Customer ID" />
+            <TableColumn fx:id="UserIdCol" prefWidth="75.0" text="User ID" />
         </columns>
       </TableView>
-      <Button layoutX="1065.0" layoutY="423.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="Cancel" />
-      <Button layoutX="357.0" layoutY="423.0" mnemonicParsing="false" text="Delete Appointment" />
-      <RadioButton layoutX="475.0" layoutY="59.0" mnemonicParsing="false" text="Current Week" />
-      <RadioButton layoutX="601.0" layoutY="59.0" mnemonicParsing="false" text="Current Month" />
-      <RadioButton fx:id="allappts" layoutX="337.0" layoutY="59.0" mnemonicParsing="false" selected="true" text="All appointments" />
-      <Button layoutX="31.0" layoutY="496.0" mnemonicParsing="false" text="Add Appiontment" />
-      <Button layoutX="164.0" layoutY="496.0" mnemonicParsing="false" text="Update Appointment" />
+        <Button fx:id="CancelBtn" layoutX="1065.0" layoutY="423.0" mnemonicParsing="false" onAction="#cancelClick" prefHeight="25.0" prefWidth="52.0" text="Cancel" />
+      <Button fx:id="DeleteBtn" layoutX="357.0" layoutY="423.0" mnemonicParsing="false" onAction="#deleteClick" text="Delete Appointment" />
+      <RadioButton fx:id="WeekAppts" layoutX="475.0" layoutY="59.0" mnemonicParsing="false" onAction="#radioWeekClick" text="Current Week" />
+      <RadioButton  fx:id="MonthAppts" layoutX="601.0" layoutY="59.0" mnemonicParsing="false" onAction="#radioMonthClick" text="Current Month" />
+      <RadioButton fx:id="AllAppts" layoutX="337.0" layoutY="59.0" mnemonicParsing="false" onAction="#radioAllClick" selected="true" text="All appointments" />
+      <Button fx:id="AddAppt" layoutX="31.0" layoutY="496.0" mnemonicParsing="false" onAction="#addClick" text="Add Appointment" />
+      <Button fx:id="UpdateAppt" layoutX="164.0" layoutY="496.0" mnemonicParsing="false" onAction="#updateClick" text="Update Appointment" />
       <Label layoutX="29.0" layoutY="28.0" text="Appointments" textFill="#7c0202">
          <font>
             <Font name="System Bold" size="20.0" />
@@ -66,33 +66,33 @@
         </rowConstraints>
          <children>
             <Label prefHeight="17.0" prefWidth="96.0" text="Appointment ID" GridPane.halignment="LEFT" />
-            <TextField prefHeight="25.0" prefWidth="158.0" GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="ApptId" promptText="Auto Gen - Disabled" prefHeight="25.0" prefWidth="158.0" GridPane.columnIndex="1" />
+            <TextField fx:id="Title"  GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField  fx:id="Description" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="Location" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Title" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
             <Label text="Description" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
             <Label text="Location" GridPane.rowIndex="3" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="Contact" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Contact" GridPane.rowIndex="4" />
             <Label text="Type" GridPane.rowIndex="5" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="Type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Start Date" GridPane.rowIndex="6" />
             <Label text="Start Time" GridPane.rowIndex="7" />
             <Label text="End Time" GridPane.rowIndex="8" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <DatePicker fx:id="Date" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="StartTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="EndTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <Label text="Customer ID" GridPane.rowIndex="9" />
             <Label text="User ID" GridPane.rowIndex="10" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ComboBox fx:id="CustId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="UserId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
          </children>
       </GridPane>
-      <Button layoutX="1029.0" layoutY="31.0" mnemonicParsing="false" text="Back to Customer" />
+      <Button fx:id="BackBtn" layoutX="1029.0" layoutY="31.0" mnemonicParsing="false" onAction="#backClick" text="Back to Customer" />
       <BorderPane layoutX="149.0" layoutY="618.0" prefHeight="98.0" prefWidth="402.0">
          <left>
-            <ComboBox prefWidth="150.0" promptText="Month" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="MonthList" prefWidth="150.0" promptText="Month" BorderPane.alignment="CENTER" />
          </left>
          <top>
             <Label text="Generate report showing number of appointments per month by type" BorderPane.alignment="CENTER">
@@ -102,10 +102,10 @@
             </Label>
          </top>
          <right>
-            <ComboBox prefWidth="150.0" promptText="Type" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="TypeList" prefWidth="150.0" promptText="Type" BorderPane.alignment="CENTER" />
          </right>
          <bottom>
-            <Button mnemonicParsing="false" text="Create Report" BorderPane.alignment="CENTER" />
+            <Button fx:id="CreateReportBtn" mnemonicParsing="false" text="Create Report" onAction="#createReportClick" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
       <Label layoutX="601.0" layoutY="562.0" text="Tools" textFill="#7c0202">
@@ -122,10 +122,10 @@
             </Label>
          </top>
          <center>
-            <ComboBox prefWidth="150.0" promptText="Choose Contact" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="ContactList" prefWidth="150.0" promptText="Choose Contact" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <Button mnemonicParsing="false" text="Generate Schedule" BorderPane.alignment="CENTER" />
+            <Button fx:id="GenerateContactSchedule" mnemonicParsing="false" text="Generate Schedule" onAction="#contactScheduleClick" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
    </children>

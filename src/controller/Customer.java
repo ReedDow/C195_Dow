@@ -54,7 +54,7 @@ public class Customer implements Initializable{
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        stage.setTitle("Main Form");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
@@ -65,6 +65,12 @@ public class Customer implements Initializable{
     public void onModifyClick(ActionEvent actionEvent) {
     }
 
-    public void scheduleClick(ActionEvent actionEvent) {
+    public void scheduleClick(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Appointment.fxml"));
+        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Appointments");
+        stage.setScene(scene);
+        stage.show();
     }
 }
