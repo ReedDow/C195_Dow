@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBCustomers;
+import model.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,17 +22,17 @@ import java.util.ResourceBundle;
 
 public class Customer implements Initializable{
     @FXML
-    private TableView customerTable;
+    private TableView<Customer> customerTable;
     @FXML
-    private TableColumn CustIdCol;
+    private TableColumn<Customer, Integer> CustIdCol;
     @FXML
-    private TableColumn CustNameCol;
+    private TableColumn<Customer, String> CustNameCol;
     @FXML
-    private TableColumn CustAddressCol;
+    private TableColumn<Customer, String> CustAddressCol;
     @FXML
-    private TableColumn CustPostCol;
+    private TableColumn<Customer, String> CustPostCol;
     @FXML
-    private TableColumn CustPhoneCol;
+    private TableColumn<Customer, String> CustPhoneCol;
     @FXML
     private TextField CustID;
     @FXML
@@ -42,11 +47,15 @@ public class Customer implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
-//        ObservableList<model.Customer> customerList = DBCustomers.getAllCustomers();
-//        for(model.Customer C : customerList){
-//            System.out.println("Country id : " + C.);
-//        }
-        System.out.println("Initialized!");
+        customerTable.setItems(DBCustomers.getAllCustomers());
+
+        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        CustNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        CustAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        CustPostCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        CustPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+        System.out.println("Customer page Initialized");
 
     }
 

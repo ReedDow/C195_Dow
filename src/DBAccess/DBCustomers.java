@@ -4,11 +4,33 @@ import Database.DBConnection;;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
+
 import java.sql.*;
 
 public class DBCustomers {
 
-    public static ObservableList<Customer> getAllCustomers(){
+    public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+
+//    public static Customer getCustomer(int customerId){
+//     try {
+//        String sql = "SELECT * FROM customer WHERE customerId='" + customerId + "'";
+//        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+//        ResultSet rs = ps.executeQuery(sql);
+//
+//        if (rs.next()) {
+//            Customer C = new Customer();
+//            C.setName(rs.getString("customerName"));
+//            ps.close();
+//            return C;
+//        }
+//    } catch (SQLException e) {
+//        System.out.println("SQLException: " + e.getMessage());
+//    }
+//        return null;
+//    }
+
+
+    public static ObservableList<controller.Customer> getAllCustomers(){
 
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
         try{
@@ -35,8 +57,28 @@ public class DBCustomers {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
+    }
 
-        return customerList;
+    /**Add new customer method*/
+    public static void newCustomer(Customer newCustomer){
+        try{
+            String sql = "INSERT INTO customer (customerName, address, postalCode, phone, division, divisionId, country, createDate, createdBy, lastUpdate, lastUpdatedBy" + "Values (?, ?, ?, ?, ?, ?, ?, Now(), ?, Now(), ?)";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
+            ps.setString(1, newCustomer.getName());
+            ps.setString(2, newCustomer.getAddress());
+            ps.setString(3, newCustomer.getPostalCode());
+            ps.setString(4, newCustomer.getPhone());
+            ps.setString(5, newCustomer.getDivision());
+            ps.setInt(6, newCustomer.getDivisionId());
+            ps.setString(7, newCustomer.getCountry());
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
 

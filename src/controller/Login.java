@@ -32,7 +32,7 @@ public class Login implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        System.out.println("Initialized!");
+        System.out.println("Login page Initialized!");
 
         LabelLocation.setText("Salt Lake City");
 

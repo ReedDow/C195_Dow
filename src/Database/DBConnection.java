@@ -11,11 +11,10 @@ public class DBConnection {
     private static final String ipAddress = "//wgudb.ucertify.com:3306/";
     private static final String dbName = "client_schedule";
 
-    private static final String jdbcURL = protocol + vendorName + ipAddress + dbName;
-            //+ "?connectionTimeZone=SERVER";
+    private static final String jdbcURL = protocol + vendorName + ipAddress + dbName + "?connectionTimeZone=SERVER";
 
     private static final String MYSQLJBCDriver = "com.mysql.cj.jdbc.Driver";
-    private static final String password = "PasswOrd!";
+    private static final String password = "Passw0rd!";
 
 
     private static final String username = "sqlUser";
@@ -29,6 +28,8 @@ public class DBConnection {
             System.out.println("DB Connection Successful");
         } catch(SQLException e){
             e.printStackTrace();
+            System.out.println("Unable to connect to DB");
+            System.out.println("SQL State: " + e.getSQLState());
         } catch(ClassNotFoundException e){
             e.printStackTrace();
         }
