@@ -1,5 +1,7 @@
 package controller;
 
+import DBAccess.DBCustomers;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +41,11 @@ public class Customer implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+
+//        ObservableList<model.Customer> customerList = DBCustomers.getAllCustomers();
+//        for(model.Customer C : customerList){
+//            System.out.println("Country id : " + C.);
+//        }
         System.out.println("Initialized!");
 
     }
