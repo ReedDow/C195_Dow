@@ -1,6 +1,7 @@
 package main;
 
-import Database.DBConnection;
+
+import Database.JDBC;
 import javafx.application.Application;
 import java.io.IOException;
 import java.util.Locale;
@@ -26,9 +27,9 @@ public class Main extends Application {
 //    }
 
     public static void main(String[] args){
-        DBConnection.startConnection();
+        JDBC.makeConnection();
         launch(args);
-        DBConnection.closeConnection();
+        JDBC.closeConnection();
 
     }
 }

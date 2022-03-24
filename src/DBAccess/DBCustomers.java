@@ -1,11 +1,13 @@
 package DBAccess;
 
-import Database.DBConnection;;
+
+import Database.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
 
 import java.sql.*;
+
 
 public class DBCustomers {
 
@@ -36,7 +38,7 @@ public class DBCustomers {
         try{
             String sql = "SELECT * FROM customers";
 
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
 
@@ -65,7 +67,7 @@ public class DBCustomers {
         try{
             String sql = "INSERT INTO customer (customerName, address, postalCode, phone, division, divisionId, country, createDate, createdBy, lastUpdate, lastUpdatedBy" + "Values (?, ?, ?, ?, ?, ?, ?, Now(), ?, Now(), ?)";
 
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
             ps.setString(1, newCustomer.getName());
             ps.setString(2, newCustomer.getAddress());
