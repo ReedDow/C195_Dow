@@ -1,7 +1,9 @@
 package controller;
 
 import DBAccess.DBCustomers;
-import model.*;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import model.Customer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +22,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Customer implements Initializable{
+public class Customers implements Initializable{
+
     @FXML
     private TableView<Customer> customerTable;
     @FXML
@@ -30,19 +33,23 @@ public class Customer implements Initializable{
     @FXML
     private TableColumn<Customer, String> CustAddressCol;
     @FXML
+    private  TableColumn<Customer, Integer> CustDiv;
+    @FXML
     private TableColumn<Customer, String> CustPostCol;
     @FXML
     private TableColumn<Customer, String> CustPhoneCol;
     @FXML
     private TextField CustID;
     @FXML
-    private TextField CustNmae;
+    private TextField CustName;
     @FXML
     private TextField CustAddress;
     @FXML
     private TextField CustPostal;
     @FXML
     private TextField CustPhone;
+
+    ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -52,10 +59,15 @@ public class Customer implements Initializable{
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         CustNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         CustAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        CustDiv.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
         CustPostCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         CustPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
 
         System.out.println("Customer page Initialized");
+        ObservableList<Customer> clist = DBCustomers.getAllCustomers();
+        for(Customer C : clist){
+            System.out.println("Customer ID: " + C.getCustomerId() +  " Name: " + C.getName());
+        }
 
     }
 

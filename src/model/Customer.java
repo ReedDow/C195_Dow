@@ -8,28 +8,26 @@ public class Customer {
     private String address;
     private String postalCode;
     private String phone;
-    private String division;
     private Integer divisionId;
-    private String country;
+
 
 
     /**Constructor for customer*/
-    public Customer(Integer customerId, String name, String address, String postalCode, String phone, String division, Integer divisionId, String country){
+    public Customer(Integer customerId, String name, String address, String postalCode, String phone, Integer divisionId){
         customerId = customerId;
         name = name;
         address = address;
         postalCode = postalCode;
         phone = phone;
-        division = division;
         divisionId = divisionId;
-        country = country;
+
     }
 
-    /**Get method for customer ID*/
-    public Integer getCustomerId(
+    /**Get method for customer id*/
+    public int getCustomerId(
     ){ return customerId;}
 
-    /**Set method for id*/
+    /**Set method for customer id*/
     public void setCustomerId(int customerId){
         this.customerId = customerId;
     }
@@ -55,17 +53,17 @@ public class Customer {
     public String getPhone(
     ){ return phone;}
 
-    /**Get method for division*/
-    public String getDivision(
-    ){ return division;}
+//    /**Get method for division*/
+//    public String getDivision(
+//    ){ return division;}
 
     /**Get method for division ID*/
     public Integer getDivisionId(
     ){ return divisionId;}
 
-    /**Get method for country*/
-    public String getCountry(
-    ){ return country;}
+//    /**Get method for country*/
+//    public String getCountry(
+//    ){ return country;}
 
 
 }

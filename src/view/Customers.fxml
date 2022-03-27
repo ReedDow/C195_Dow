@@ -18,7 +18,7 @@
 <AnchorPane fx:id="CustomerAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="567.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.Customer">
+            fx:controller="controller.Customers">
     <children>
         <GridPane layoutX="51.0" layoutY="98.0" prefHeight="199.0" prefWidth="177.0">
             <columnConstraints>
@@ -41,7 +41,7 @@
                 <Label text="Country" GridPane.rowIndex="5" />
                 <Label text="State/Province" GridPane.rowIndex="6" />
                 <TextField fx:id="CustID" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" disable="true"/>
-                <TextField fx:id="CustNmae" prefHeight="25.0" prefWidth="132.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="CustName" prefHeight="25.0" prefWidth="132.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="CustAddress" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="CustPostal" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="CustPhone" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />

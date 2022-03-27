@@ -44,7 +44,7 @@ public class Login implements Initializable {
     void onLoginClick(ActionEvent event) throws IOException {
         System.out.println("Clicked");
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setTitle("Add Part");

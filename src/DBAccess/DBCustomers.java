@@ -16,7 +16,7 @@ public class DBCustomers {
 //    public static Customer getCustomer(int customerId){
 //     try {
 //        String sql = "SELECT * FROM customer WHERE customerId='" + customerId + "'";
-//        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+//        PreparedStatement ps = JDBC.makeConnection().prepareStatement(sql);
 //        ResultSet rs = ps.executeQuery(sql);
 //
 //        if (rs.next()) {
@@ -32,11 +32,11 @@ public class DBCustomers {
 //    }
 
 
-    public static ObservableList<controller.Customer> getAllCustomers(){
+    public static ObservableList<Customer> getAllCustomers(){
 
-        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+        ObservableList<Customer> clist = FXCollections.observableArrayList();
         try{
-            String sql = "SELECT * FROM customers";
+            String sql = "SELECT * FROM customers.*, first_level_divisions.Division, first_level_divisions.COUNTRY_ID, countries.Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID and first_level_divisions.COUNTRY_ID = countries.Country_ID";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
@@ -44,17 +44,16 @@ public class DBCustomers {
 
             while(rs.next()){
                 int customerId = rs.getInt("Customer_ID");
-                String customerName = rs.getString("Customer_Name");
+                String name = rs.getString("Customer_Name");
                 String address = rs.getString("Address");
                 String postalCode = rs.getString("Postal_Code");
                 String phone = rs.getString("Phone");
-                String division = rs.getString("Division");
                 int divisionId = rs.getInt("Division_ID");
-                String country = rs.getString("Country");
 
-                Customer C = new Customer(customerId, customerName, address, postalCode, phone, division, divisionId, country);
 
-                customerList.add(C);
+                Customer C = new Customer(customerId, name, address, postalCode, phone, divisionId);
+
+                clist.add(C);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,9 +72,9 @@ public class DBCustomers {
             ps.setString(2, newCustomer.getAddress());
             ps.setString(3, newCustomer.getPostalCode());
             ps.setString(4, newCustomer.getPhone());
-            ps.setString(5, newCustomer.getDivision());
+            //ps.setString(5, newCustomer.getDivision());
             ps.setInt(6, newCustomer.getDivisionId());
-            ps.setString(7, newCustomer.getCountry());
+            //ps.setString(7, newCustomer.getCountry());
 
 
         }catch(SQLException e){
