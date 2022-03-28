@@ -73,8 +73,8 @@
         <Button layoutX="682.0" layoutY="34.0" mnemonicParsing="false" onAction="#scheduleClick" text="Go to Appointments"  />
         <TableView fx:id="customerTable" layoutX="280.0" layoutY="80.0" prefHeight="310.0" prefWidth="585.0">
             <columns>
-                <TableColumn fx:id="CustIdCol" prefWidth="75.0" text="Customer Id" />
-                <TableColumn fx:id="CustNameCol" prefWidth="90.0" text="Name" />
+                <TableColumn fx:id="CustIdCol" prefWidth="45.0" text="Id" />
+                <TableColumn fx:id="CustNameCol" prefWidth="110.0" text="Name" />
                 <TableColumn fx:id="CustAddressCol" prefWidth="143.0" text="Address" />
                 <TableColumn fx:id="CustDiv" prefWidth="70.0" text="Div Id" />
                 <TableColumn fx:id="CustPostCol" prefWidth="90.0" text="Postal Code" />
