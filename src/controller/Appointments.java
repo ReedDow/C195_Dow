@@ -1,39 +1,48 @@
 package controller;
 
+import DBAccess.DBAppointments;
+import DBAccess.DBCustomers;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.*;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class Appointment {
+public class Appointments implements Initializable {
 
     @FXML
-    private TableView ApptTable;
+    private TableView<Appointment> ApptTable;
     @FXML
-    private TableColumn ApptIdCol;
+    private TableColumn<Appointment, Integer> ApptIdCol;
     @FXML
-    private TableColumn TitleCol;
+    private TableColumn<Appointment, String> TitleCol;
     @FXML
-    private TableColumn DescCol;
+    private TableColumn<Appointment, String> DescCol;
     @FXML
-    private TableColumn LocCol;
+    private TableColumn<Appointment, String> LocCol;
     @FXML
-    private TableColumn ContactCol;
+    private TableColumn<Appointment, String> ContactCol;
     @FXML
-    private TableColumn TypeCol;
+    private TableColumn<Appointment, String> TypeCol;
     @FXML
-    private TableColumn StartCol;
+    private TableColumn<Appointment, String> StartCol;
     @FXML
-    private TableColumn EndCol;
+    private TableColumn<Appointment, String> EndCol;
     @FXML
-    private TableColumn CustIdCol;
+    private TableColumn<Appointment, String> CustIdCol;
     @FXML
-    private TableColumn UserIdCol;
+    private TableColumn<Appointment, String> UserIdCol;
     @FXML
     private Button CancelBtn;
     @FXML
@@ -83,6 +92,27 @@ public class Appointment {
     @FXML
     private TextField EndTime;
 
+    ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle){
+
+        ApptTable.setItems(DBAppointments.getAllAppointments());
+
+        ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        DescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        LocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        ContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+    }
+
+
     public void cancelClick(ActionEvent actionEvent) {
     }
 
@@ -109,6 +139,8 @@ public class Appointment {
 
     public void contactScheduleClick(ActionEvent actionEvent) {
     }
+
+
 
     public void backClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));

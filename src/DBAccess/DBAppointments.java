@@ -57,7 +57,7 @@ public class DBAppointments {
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID and appointments.Appointments_ID=";
+            String sql = "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
@@ -92,6 +92,54 @@ public class DBAppointments {
         return aList;
     }
 
+public static void newAppointment(Appointment newAppointment){
+        try{
+            String sql = "INSERT INTO appointments Values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
+            ps.setString(1, newAppointment.getTitle());
+            ps.setString(2, newAppointment.getDescription());
+            ps.setString(3, newAppointment.getLocation());
+            ps.setString(4, newAppointment.getType());
+            ps.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
+            ps.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
+            ps.setTimestamp(7, Timestamp.valueOf(newAppointment.getCreatedTime()));
+            ps.setString(8, newAppointment.getAuthor());
+            ps.setTimestamp(9, Timestamp.valueOf(newAppointment.getLastUpdate()));
+            ps.setString(10, newAppointment.getLastUpdateAuthor());
+            ps.setString(11, String.valueOf(newAppointment.getContactId()));
+            ps.setString(12, String.valueOf(newAppointment.getUserId()));
+            ps.setString(13, String.valueOf(newAppointment.getCustomerId()));
+        }
+       catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+    public static void updateAppointment(Appointment newAppointment){
+        try{
+            String sql = "UPDATE appointments Set Title=?, Description=?, Location=?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, newAppointment.getTitle());
+            ps.setString(2, newAppointment.getDescription());
+            ps.setString(3, newAppointment.getLocation());
+            ps.setString(4, newAppointment.getType());
+            ps.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
+            ps.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
+            ps.setTimestamp(7, Timestamp.valueOf(newAppointment.getCreatedTime()));
+            ps.setString(8, newAppointment.getAuthor());
+            ps.setTimestamp(9, Timestamp.valueOf(newAppointment.getLastUpdate()));
+            ps.setString(10, newAppointment.getLastUpdateAuthor());
+            ps.setString(11, String.valueOf(newAppointment.getContactId()));
+            ps.setString(12, String.valueOf(newAppointment.getUserId()));
+            ps.setString(13, String.valueOf(newAppointment.getCustomerId()));
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
