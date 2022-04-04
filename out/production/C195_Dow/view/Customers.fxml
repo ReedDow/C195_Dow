@@ -76,7 +76,7 @@
                 <TableColumn fx:id="CustIdCol" prefWidth="45.0" text="Id" />
                 <TableColumn fx:id="CustNameCol" prefWidth="110.0" text="Name" />
                 <TableColumn fx:id="CustAddressCol" prefWidth="143.0" text="Address" />
-                <TableColumn fx:id="CustDiv" prefWidth="70.0" text="Div Id" />
+                <TableColumn fx:id="CustDivCol" prefWidth="70.0" text="Div Id" />
                 <TableColumn fx:id="CustPostCol" prefWidth="90.0" text="Postal Code" />
                 <TableColumn fx:id="CustPhoneCol" prefWidth="117.0" text="Phone Number" />
             </columns>

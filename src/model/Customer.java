@@ -5,19 +5,19 @@ import java.time.LocalDateTime;
 /**Customer model*/
 public class Customer {
 
-    private final Integer customerId;
-    private final String name;
-    private final String address;
-    private final String postalCode;
-    private final String phone;
-    private final LocalDateTime time;
-    private final String author;
+    private Integer customerId;
+    private String name;
+    private String address;
+    private String postalCode;
+    private String phone;
+    private LocalDateTime time;
+    private String author;
     private LocalDateTime lastUpdate;
     private String lastUpdateAuthor;
-    private final String division;
-    private final Integer divisionId;
-    private final String country;
-    private final Integer countryId;
+    private String division;
+    private Integer divisionId;
+    private String country;
+    private Integer countryId;
 
 
 
@@ -93,8 +93,72 @@ public class Customer {
     public String getCountry(
     ){ return country;}
 
+    /**Get method for country ID*/
     public int getCountryId(
     ){ return countryId;}
 
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    /**set method for customer ID*/
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**set method for address*/
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**set method for postal code*/
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    /**set method for phone*/
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**set method for time*/
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
+    /**set method for time*/
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**set method for time*/
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    /**set method for time*/
+    public void setLastUpdateAuthor(String lastUpdateAuthor) {
+        this.lastUpdateAuthor = lastUpdateAuthor;
+    }
+
+    /**set method for time*/
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    /**set method for time*/
+    public void setDivisionId(Integer divisionId) {
+        this.divisionId = divisionId;
+    }
+
+    /**set method for time*/
+    public void setCountry(String time) {
+        this.country = country;
+    }
+
+    /**set method for time*/
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
 
 }

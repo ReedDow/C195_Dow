@@ -54,15 +54,7 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <ComboBox fx:id="CustState" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="USA" />
-                            <String fx:value="UK" />
-                            <String fx:value="France" />
-                        </FXCollections>
-                    </items>
-                </ComboBox>
+                <ComboBox fx:id="CustState" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" onAction="#initializeDivision" GridPane.rowIndex="6"/>
             </children>
         </GridPane>
         <Label layoutX="31.0" layoutY="34.0" text="Customer">
@@ -76,7 +68,7 @@
                 <TableColumn fx:id="CustIdCol" prefWidth="45.0" text="Id" />
                 <TableColumn fx:id="CustNameCol" prefWidth="110.0" text="Name" />
                 <TableColumn fx:id="CustAddressCol" prefWidth="143.0" text="Address" />
-                <TableColumn fx:id="CustDiv" prefWidth="70.0" text="Div Id" />
+                <TableColumn fx:id="CustDivCol" prefWidth="70.0" text="Div Id" />
                 <TableColumn fx:id="CustPostCol" prefWidth="90.0" text="Postal Code" />
                 <TableColumn fx:id="CustPhoneCol" prefWidth="117.0" text="Phone Number" />
             </columns>

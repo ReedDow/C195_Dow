@@ -87,7 +87,7 @@ public class DBCustomers {
     /**Add new customer method*/
     public static void newCustomer(Customer newCustomer){
         try{
-            String sql = "INSERT INTO customers Values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO customers Values ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
@@ -100,12 +100,16 @@ public class DBCustomers {
             ps.setTimestamp(7, Timestamp.valueOf(newCustomer.getLastUpdate()));
             ps.setString(8, newCustomer.getLastUpdateAuthor());
             ps.setInt(9, newCustomer.getDivisionId());
-
+            ps.executeUpdate();
 
 
         }catch(SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public static void modifyCustomer(Customer customer){
+
     }
 
     public static boolean deleteCustomer(Customer selectedCustomer) {
