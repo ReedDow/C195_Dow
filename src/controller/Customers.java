@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBCustomers;
+import DBAccess.DBDivisions;
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
@@ -8,20 +9,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Division;
-import model.Country;
 import model.Customer;
 
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -66,23 +64,25 @@ public class Customers implements Initializable{
     @FXML
     public ComboBox<String> CustCountry;
 
-    private ObservableList<String> countries = FXCollections.observableArrayList("United States", "United Kingdom", "Canada");
+    private ObservableList<String> countries = FXCollections.observableArrayList("U.S", "UK", "Canada");
 
     public void initializeDivision(){
-        Integer selectedCountry = CustCountry.getSelectionModel().getSelectedIndex();
-        if(selectedCountry == 0){
+        String selectedCountry = String.valueOf(CustCountry.getValue());
 
-        }
+        CustState.setItems(DBDivisions.getSelectedDivisions(selectedCountry));
 
     }
-    ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
         CustCountry.setItems(countries);
 
+
+
         customerTable.setItems(DBCustomers.getAllCustomers());
+
+
 
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         CustNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
