@@ -1,5 +1,6 @@
 package controller;
 
+import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBDivisions;
 import javafx.collections.FXCollections;
@@ -9,17 +10,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Country;
 import model.Division;
 import model.Customer;
 
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -62,27 +67,28 @@ public class Customers implements Initializable{
     @FXML
     private ComboBox<Division> CustState;
     @FXML
-    public ComboBox<String> CustCountry;
+    public ComboBox<Country> CustCountry;
 
-    private ObservableList<String> countries = FXCollections.observableArrayList("U.S", "UK", "Canada");
+
 
     public void initializeDivision(){
+
         String selectedCountry = String.valueOf(CustCountry.getValue());
 
+        /**Populate State/Province/Division combo-box when Country has been chosen.*/
         CustState.setItems(DBDivisions.getSelectedDivisions(selectedCountry));
+
 
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
-        CustCountry.setItems(countries);
+        /**Populate Country combo-box from DB upon page initialization*/
+        CustCountry.setItems(DBCountries.getAllCountries());
 
-
-
+        /**Populate customer table from DB upon page initialization*/
         customerTable.setItems(DBCustomers.getAllCustomers());
-
-
 
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         CustNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -129,7 +135,7 @@ public class Customers implements Initializable{
             alert("Error", "No customer selected", "Please select customer to delete");
             return;
         }
-        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer?")) {
+        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments??")) {
 
             Customer customerToDelete = customerTable.getSelectionModel().getSelectedItem();
             DBCustomers.deleteCustomer(customerToDelete);
@@ -147,38 +153,38 @@ public class Customers implements Initializable{
         stage.show();
     }
 
-    public void onAddClick(ActionEvent actionEvent) throws IOException {
-//
-//        boolean added = false;
-//
-//        //int newPartID = partId;
-//        String name = CustName.getText();
-//        String address = CustAddress.getText();
-//        String division = CustState.getSelectionModel().toString();
-//        String country = CustCountry.getSelectionModel().toString();
-//        String postalCode = CustPostal.getText();
-//        String phone = CustPhone.getText();
-//        //LocalDateTime time = Cust.getText();
-//
-//
-//        if (name.isEmpty() || address.isEmpty() || division.isEmpty() || country.isEmpty() || postalCode.isEmpty() || phone.isEmpty()) {
-//
-//            alert("Error", "Invalid input", "All fields must be filled");
-//        }
+    public void onAddClick(ActionEvent actionEvent) throws IOException, SQLException {
 
-//        else {
-//                DBCustomers.newCustomer(name, address, division, country, postalCode, phone);
-//
-//                added = true;
-//            }
-//        if (added) {
-//        Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
-//        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-//        Scene scene = new Scene(root);
-//        stage.setTitle("Main form");
-//        stage.setScene(scene);
-//        stage.show();
-//        }
+        boolean added = false;
+
+        String name = CustName.getText();
+        String address = CustAddress.getText();
+        String division = String.valueOf(CustState.getValue());
+        String country = String.valueOf(CustCountry.getValue());
+        String postalCode = CustPostal.getText();
+        String phone = CustPhone.getText();
+
+        if (name.isEmpty() || address.isEmpty() || division.isEmpty() || country.isEmpty() || postalCode.isEmpty() || phone.isEmpty()) {
+
+            alert("Error", "Invalid input", "All fields must be filled");
+        }
+
+        else {
+            int divisionId = DBDivisions.getDivisionID(division);
+            DBCustomers.newCustomer(country, name, address, division, postalCode, phone, divisionId);
+
+            added = true;
+            }
+
+        if (added) {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Main form");
+            stage.setScene(scene);
+            stage.show();
+            }
 
 //        if (customer == null)
 //            customer = new Customer();
@@ -186,19 +192,18 @@ public class Customers implements Initializable{
 //        customer.setName(CustName.getText());
 //        customer.setAddress(CustAddress.getText());
 //        customer.setDivisionId(CustDiv.getValue().getId());
-//        customer.setDivision(CustState.getValue().getCountryName());
-//        customer.setCountryId(CustCountry.getValue().getDivisionId());
-//        customer.setCountry(CustCountry.getValue().getDivisionName());
+//        customer.setDivision(CustState.getValue().getDivisionName());
+//        customer.setCountryId(CustCountry.getValue().getCountryId());
+//        customer.setCountry(CustCountry.getValue().getCountryName());
 //        customer.setPostalCode(CustPostal.getText());
 //        customer.setPhone(CustPhone.getText());
 //        if(customer.getAuthor() == null)
 //            customer.setTime(LocalDateTime.now());
 //        customer.setLastUpdate(LocalDateTime.now());
-//
-//        onAddClick().accept(customer);
-//
-//        Stage stage = (Stage) onSaveClick.getScene().getWindow();
-//        stage.close();
+
+
+
+
 
     }
 

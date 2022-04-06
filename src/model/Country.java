@@ -49,6 +49,11 @@ public class Country {
         return lastUpdateAuthor;
     }
 
+    @Override
+    public String toString(){
+        return getCountryName();
+    }
+
 
 
 }

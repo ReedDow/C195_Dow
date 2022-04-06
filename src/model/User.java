@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
         private static String username;
         private String password;
         private LocalDateTime createDate;
-        private String createdBy;
+        private String author;
         private LocalDateTime lastUpdate;
         private String updatedBy;
         private static String loggedUser;
@@ -31,8 +31,8 @@ import java.time.LocalDateTime;
             this.createDate = createDate;
         }
 
-        public void setCreatedBy(String createdBy) {
-            this.createdBy = createdBy;
+        public void setCreatedBy(String author) {
+            this.author = author;
         }
 
         public void setLastUpdate(LocalDateTime lastUpdate) {
@@ -44,7 +44,7 @@ import java.time.LocalDateTime;
         }
 
         public void setLoggedUser(String loggedUser) {
-            User.loggedUser = loggedUser;
+            this.loggedUser = loggedUser;
         }
 
         //get methods
@@ -65,7 +65,7 @@ import java.time.LocalDateTime;
         }
 
         public String getCreatedBy() {
-            return createdBy;
+            return author;
         }
 
         public LocalDateTime getLastUpdate() {

@@ -42,7 +42,7 @@ public class DBCountries {
     }
 
     /**this method returns all countries from the database */
-    public static Country getAllCountries(){
+    public static ObservableList <Country> getAllCountries(){
 
         ObservableList<Country> cList = FXCollections.observableArrayList();
 
@@ -69,7 +69,7 @@ public class DBCountries {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return (Country) cList;
+        return cList;
     }
     /**this method adds a country to db */
     public static void addCountry(Country newCountry) {

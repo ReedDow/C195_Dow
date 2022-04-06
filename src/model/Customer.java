@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**Customer model*/
 public class Customer {
 
-    private Integer customerId;
+    private int customerId;
     private String name;
     private String address;
     private String postalCode;
@@ -15,9 +15,9 @@ public class Customer {
     private LocalDateTime lastUpdate;
     private String lastUpdateAuthor;
     private String division;
-    private Integer divisionId;
+    private int divisionId;
     private String country;
-    private Integer countryId;
+    private int countryId;
 
 
 
@@ -38,23 +38,16 @@ public class Customer {
         countryId = cCountryId;
     }
 
+    public Customer() {
+    }
+
     /**Get method for customer id*/
     public int getCustomerId(
     ){ return customerId;}
 
-//    /**Set method for customer id*/
-//    public void setCustomerId(int customerId){
-//        this.customerId = customerId;
-//    }
-
     /**Get method for name*/
     public String getName(
     ){ return name;}
-
-//    /**Set method for name*/
-//    public void setName(String name){
-//        this.name = name;
-//    }
 
     /**Get method for address*/
     public String getAddress(
@@ -126,39 +119,42 @@ public class Customer {
         this.time = time;
     }
 
-    /**set method for time*/
+    /**set method for author*/
     public void setAuthor(String author) {
         this.author = author;
     }
 
-    /**set method for time*/
+    /**set method for last update time*/
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    /**set method for time*/
+    /**set method for last update author*/
     public void setLastUpdateAuthor(String lastUpdateAuthor) {
         this.lastUpdateAuthor = lastUpdateAuthor;
     }
 
-    /**set method for time*/
-    public void setDivision(String division) {
-        this.division = division;
-    }
 
-    /**set method for time*/
+    /**set method for division id*/
     public void setDivisionId(Integer divisionId) {
         this.divisionId = divisionId;
     }
 
-    /**set method for time*/
+    /**set method for division*/
+    public void setDivision(String division){
+        this.division = division;
+    }
+
+    /**set method for country*/
     public void setCountry(String time) {
         this.country = country;
     }
 
-    /**set method for time*/
+    /**set method for country id*/
     public void setCountryId(Integer countryId) {
         this.countryId = countryId;
     }
+
+
 
 }
