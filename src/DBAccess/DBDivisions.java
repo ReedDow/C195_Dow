@@ -21,7 +21,7 @@ public class DBDivisions {
             String sql = "SELECT first_level_divisions.Division, first_level_divisions.Division_ID, first_level_divisions.Create_Date, first_level_divisions.Created_By, first_level_divisions.Last_Update, first_level_divisions.Last_Updated_By, first_level_divisions.Country_ID "
                     + "FROM first_level_divisions, countries "
                     + "WHERE first_level_divisions.Country_ID = countries.Country_ID "
-                    + "AND countries.Country = \"" + country + "\"";
+                    + "AND countries.Country = '" + country + "'";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
@@ -73,24 +73,29 @@ public class DBDivisions {
         return dList;
     }
 
-    public static Integer getDivisionID(String division) throws SQLException {
-        Integer divID = 0;
-        String sql = "SELECT Division, Division_ID FROM " +
-                "first_level_divisions WHERE Division = ?";
+    public static Integer getDivisionID(String division) {
 
-        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+         try {
+             String sql = "SELECT Division_ID "
+                     + "FROM first_level_divisions "
+                     + "WHERE Division = ?";
 
-        rs.getString(division);
+             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
+             ps.setString(1, division);
 
+             int divId = 0;
 
-        while ( rs.next() ) {
-            divID = rs.getInt("Division_ID");
-        }
+             ResultSet rs = ps.executeQuery();
 
-        return divID;
+             while (rs.next()) {
+                 divId = rs.getInt("Division_ID");
 
+             }
+             return divId;
+         }catch (SQLException e) {
+             e.printStackTrace();
+         }
+         return null;
     }
-
 }

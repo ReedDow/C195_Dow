@@ -30,16 +30,6 @@ import java.util.ResourceBundle;
 
 public class Customers implements Initializable{
 
-    private final ObservableList<Division> divisions = FXCollections.observableArrayList();
-
-    /** Customer to create/edit. */
-    private Customer customer = null;
-
-    /** Consumer to be passed in from the calendar controller in order to pass back the Customer. */
-    //private Contact<Customer> onComplete;
-
-
-
     @FXML
     private TableView<Customer> customerTable;
     @FXML
@@ -68,16 +58,16 @@ public class Customers implements Initializable{
     private ComboBox<Division> CustState;
     @FXML
     public ComboBox<Country> CustCountry;
+    @FXML
+    public int divId;
 
 
-
+    /**This method populates State/Province/Division combo-box when Country has been chosen.*/
     public void initializeDivision(){
 
         String selectedCountry = String.valueOf(CustCountry.getValue());
 
-        /**Populate State/Province/Division combo-box when Country has been chosen.*/
         CustState.setItems(DBDivisions.getSelectedDivisions(selectedCountry));
-
 
     }
 
@@ -135,12 +125,14 @@ public class Customers implements Initializable{
             alert("Error", "No customer selected", "Please select customer to delete");
             return;
         }
-        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments??")) {
+        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments?")) {
 
-            Customer customerToDelete = customerTable.getSelectionModel().getSelectedItem();
-            DBCustomers.deleteCustomer(customerToDelete);
+            Customer selectedCustomerId = customerTable.getSelectionModel().getSelectedItem();
+            DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId());
             customerTable.refresh();
         }
+        else{alert("Error", "Unable to delete customer", "Please try again");
+            return;}
     }
 
 
@@ -164,14 +156,17 @@ public class Customers implements Initializable{
         String postalCode = CustPostal.getText();
         String phone = CustPhone.getText();
 
+        int divisionId = DBDivisions.getDivisionID(division);
+
         if (name.isEmpty() || address.isEmpty() || division.isEmpty() || country.isEmpty() || postalCode.isEmpty() || phone.isEmpty()) {
 
             alert("Error", "Invalid input", "All fields must be filled");
         }
 
         else {
-            int divisionId = DBDivisions.getDivisionID(division);
+
             DBCustomers.newCustomer(country, name, address, division, postalCode, phone, divisionId);
+
 
             added = true;
             }

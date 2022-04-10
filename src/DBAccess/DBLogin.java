@@ -10,14 +10,15 @@ public class DBLogin {
 
     private static User currentUser;
 
-    private static User getCurrentUser(){
+    public static User getCurrentUser() {
         return currentUser;
     }
+
 
     public static Boolean loginAttempt(String username, String password) {
 
         try{
-            String sql = "SELECT * FROM user WHERE User_Name='" + username + "' AND Password='" + password + "'";
+            String sql = "SELECT * FROM users WHERE User_Name='" + username + "' AND Password='" + password + "'";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);

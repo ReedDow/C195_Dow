@@ -103,10 +103,14 @@ public class DBCustomers {
     }
 
 
+
+
     /**Add new customer method*/
     public static void newCustomer(String country, String name, String address, String division, String postalCode, String phone, int divisionId){
         try{
-            String sql = "INSERT INTO customers Values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, >)";
+            String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, "
+            + "Created_By, Last_Update, Last_Updated_By, Division_ID) "
+            + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
@@ -115,16 +119,10 @@ public class DBCustomers {
             ps.setString (3, postalCode);
             ps.setString(4, phone);
             ps.setTimestamp(5,Timestamp.valueOf(LocalDateTime.now()));
-            ps.setString(6, "test");
+            ps.setString(6, DBLogin.getCurrentUser().getUsername());
             ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-            ps.setString(8, "test");
-            ps.setString(9, division);
-            ps.setInt(10, divisionId);
-
-
-
-
-
+            ps.setString(8, DBLogin.getCurrentUser().getUsername());;
+            ps.setInt(9, divisionId);
 
 
             ps.executeUpdate();
@@ -139,15 +137,23 @@ public class DBCustomers {
 
     }
 
-    public static boolean deleteCustomer(Customer selectedCustomer) {
-        for (Customer c : allCustomers) {
-            if (c.getCustomerId() == selectedCustomer.getCustomerId()) {
-                allCustomers.remove(c);
-                return true;
-            }
-        }
-        return false;
+    public static boolean deleteCustomer(int selectedCustomerId) {
+
+        try{
+            String sql = "DELETE FROM appointments, customers"
+            + "Where Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setInt(selectedCustomerId)
+
+            ps.executeUpdate();
+
+            return true;
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }return false;
     }
-
-
 }

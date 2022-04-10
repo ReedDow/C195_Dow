@@ -42,7 +42,7 @@
                 <Label text="State/Province" GridPane.rowIndex="6" />
                 <TextField fx:id="CustID" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" disable="true"/>
                 <TextField fx:id="CustName" prefHeight="25.0" prefWidth="132.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="CustAddress" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="CustAddress" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="123 ABC Street, White Plains" />
                 <TextField fx:id="CustPostal" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="CustPhone" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <ComboBox fx:id="CustCountry" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" onAction="#initializeDivision" GridPane.rowIndex="5"/>

@@ -8,22 +8,18 @@ import java.time.ZonedDateTime;
 
 public class Log {
 
-    private static final String logPath = "audit_log.txt";
+    /** This method keeps a record of log in attempts by writing user info to a file for each log in attempt, including date, time, and location of the user. */
 
-    /** This method keeps a record of log in attempts by writing user info to a file for each log in attempt. */
-
-    public static void auditLog(String username, Boolean success) throws IOException {
+    public static void loginActivity(String username, Boolean success) {
         try {
 
-            BufferedWriter log = new BufferedWriter(new FileWriter(logPath, true));
-            log.append(ZonedDateTime.now(ZoneOffset.UTC).toString() + " UTC-LOGIN ATTEMPT-USERNAME: " + username +
-                    " LOGIN SUCCESSFUL: " + success.toString() + "\n");
-            log.flush();
+            BufferedWriter log = new BufferedWriter(new FileWriter("login_activity.txt", true));
+            log.append(ZonedDateTime.now() + " Log-in attempt by: " + username +
+                    ".   Success? " + success.toString() + "\n \n");
             log.close();
         }
         catch (IOException error) {
             error.printStackTrace();
         }
-
     }
 }
