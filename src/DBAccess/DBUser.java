@@ -28,24 +28,6 @@ public class DBUser {
         return userId;
     }
 
-//    public static ObservableList<User> getUserNames(){
-//        ObservableList<User> usernames = FXCollections.observableArrayList();
-//        try {
-//            String sql = "SELECT * FROM user WHERE username = ?";
-//            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery(sql);
-//
-//            while (rs.next()) {
-//                String username = rs.getString("username");
-//
-//                usernames.add(username);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return usernames;
-//    }
-
     public static void getUsers(String Username, String Password) {
 
         ObservableList<User> users = FXCollections.observableArrayList();

@@ -33,35 +33,6 @@ public class DBCustomers {
             System.out.println(e.getMessage());
         }
         return null;
-
-//        try {
-//        String sql = "SELECT customers.*, first_level_divisions.Division, first_level_divisions.COUNTRY_ID, countries.Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID and first_level_divisions.COUNTRY_ID = countries.Country_ID and customer.Customer_ID=" + cId;
-//
-//            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery(sql);
-//
-//            while(rs.next()){
-//                int customerId = rs.getInt("Customer_ID");
-//                String name = rs.getString("Customer_Name");
-//                String address = rs.getString("Address");
-//                String postalCode = rs.getString("Postal_Code");
-//                String phone = rs.getString("Phone");
-//                LocalDateTime time = rs.getTimestamp("Create_Date").toLocalDateTime();
-//                String author = rs.getString("Created_By");
-//                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
-//                String lastUpdateAuthor = rs.getString("Last_Updated_By");
-//                String division = rs.getString("Division");
-//                int divisionId = rs.getInt("Division_ID");
-//                String country = rs.getString("Country");
-//                int countryId = rs.getInt("country_ID");
-//
-//                Customer C = new Customer(customerId, name, address, postalCode, phone, time, author, lastUpdate, lastUpdateAuthor, division, divisionId, country, countryId);
-//                return C;
-//            }
-//    } catch (SQLException e) {
-//        System.out.println("SQLException: " + e.getMessage());
-//    }
-//        return null;
     }
 
 

@@ -60,7 +60,6 @@ public class Customers implements Initializable{
     @FXML
     public ComboBox<Country> CustCountry;
     @FXML
-    public int divId;
 
 
     /**This method populates State/Province/Division combo-box when Country has been chosen.*/

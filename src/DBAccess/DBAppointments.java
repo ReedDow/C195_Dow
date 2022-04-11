@@ -4,7 +4,8 @@ import Database.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
-import model.Customer;
+import model.Contact;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
@@ -161,5 +162,142 @@ public static void newAppointment(Appointment newAppointment){
             return false;
         }
     }
+
+    public static ObservableList<String> getAllTypes() throws SQLException {
+
+        ObservableList<String> cList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT Type FROM appointments";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next()){
+                cList.add(rs.getString("Type"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return cList;
+    }
+
+    public static ObservableList<String> getAllContacts() throws SQLException {
+
+        ObservableList<String> cList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT Contact_Name FROM contacts";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next()){
+                cList.add(rs.getString("Contact_Name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return cList;
+    }
+
+    public static Integer getContactID(String contactName) {
+
+        try {
+            String sql = "SELECT Contact_ID "
+                    + "FROM contacts "
+                    + "WHERE Contact_Name = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, contactName);
+
+            int conId = 0;
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                conId = rs.getInt("Contact_Name");
+
+            }
+            return conId;
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ObservableList<String> getAllUserIds() throws SQLException {
+
+        ObservableList<String> uList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT User_ID FROM appointments";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next()){
+                uList.add(rs.getString("User_ID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return uList;
+    }
+
+    public static ObservableList<String> getAllCustomerIds() throws SQLException {
+
+        ObservableList<String> cList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT Customer_ID FROM appointments";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next()){
+                cList.add(rs.getString("Customer_ID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return cList;
+    }
+
+
+    public static ObservableList<Contact> getContactSchedule(String contactName) {
+        ObservableList<Contact> cList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT * "
+                    + "FROM appointments"
+                    + "INNER JOIN contacts "
+                    + "WHERE Contact_Name = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, contactName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int appointmentId = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String type = rs.getString("Type");
+                String start = rs.getString("Start");
+                String end = rs.getString("End");
+                int customerId = rs.getInt("Customer_ID");
+
+                Contact newContactSchedule = new Contact();
+                newContactSchedule.setAppointmentId(appointmentId);
+                newContactSchedule.setTitle(title);
+                newContactSchedule.setDescription(description);
+                newContactSchedule.setType(type);
+                newContactSchedule.setStart(LocalDateTime.parse(start));
+                newContactSchedule.setEnd(LocalDateTime.parse(end));
+                newContactSchedule.setCustomerId(customerId);
+
+                cList.add(newContactSchedule);
+            }
+            return cList;
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

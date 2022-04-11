@@ -1,7 +1,6 @@
 package controller;
 
 import DBAccess.DBAppointments;
-import DBAccess.DBCustomers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,7 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -70,7 +70,7 @@ public class Appointments implements Initializable {
     @FXML
     private Button CreateReportBtn;
     @FXML
-    private ComboBox ContactList;
+    private static ComboBox ContactList;
     @FXML
     private Button GenerateContactSchedule;
     @FXML
@@ -92,11 +92,49 @@ public class Appointments implements Initializable {
     @FXML
     private TextField EndTime;
 
+    private static Contact selectedContact;
+
     ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
+        try {
+            Contact.setItems(DBAppointments.getAllContacts());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ContactList.setItems(DBAppointments.getAllContacts());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Type.setItems(DBAppointments.getAllTypes());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            TypeList.setItems(DBAppointments.getAllTypes());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            CustId.setItems(DBAppointments.getAllCustomerIds());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            UserId.setItems(DBAppointments.getAllUserIds());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
         ApptTable.setItems(DBAppointments.getAllAppointments());
@@ -139,8 +177,12 @@ public class Appointments implements Initializable {
     public void createReportClick(ActionEvent actionEvent) {
     }
 
-    public void contactScheduleClick(ActionEvent actionEvent) {
+    public void contactScheduleClick(ActionEvent actionEvent){
+
+        String selectedContact = String.valueOf(ContactList.getValue());
     }
+
+    public static Object getSelectedContact(){return selectedContact; }
 
 
 
@@ -152,4 +194,6 @@ public class Appointments implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }
