@@ -1,5 +1,6 @@
 package controller;
 
+import DBAccess.DBAppointments;
 import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBDivisions;
@@ -119,8 +120,10 @@ public class Customers implements Initializable{
         else return false;
     }
 
-
-    public void onDeleteClick(ActionEvent actionEvent) {
+    /**This method deletes the selected customer and associated appointments
+     * Error message displays if no customer selected.
+     * Confirmation message displays before after clicking delete. */
+    public void onDeleteClick(ActionEvent actionEvent) throws SQLException {
         if(customerTable.getSelectionModel().isEmpty()){
             alert("Error", "No customer selected", "Please select customer to delete");
             return;
@@ -128,8 +131,12 @@ public class Customers implements Initializable{
         if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments?")) {
 
             Customer selectedCustomerId = customerTable.getSelectionModel().getSelectedItem();
+
+            DBAppointments.deleteAppointment((selectedCustomerId.getCustomerId()));
+
             DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId());
-            customerTable.refresh();
+
+            customerTable.setItems(DBCustomers.getAllCustomers());
         }
         else{alert("Error", "Unable to delete customer", "Please try again");
             return;}
@@ -180,26 +187,6 @@ public class Customers implements Initializable{
             stage.setScene(scene);
             stage.show();
             }
-
-//        if (customer == null)
-//            customer = new Customer();
-//
-//        customer.setName(CustName.getText());
-//        customer.setAddress(CustAddress.getText());
-//        customer.setDivisionId(CustDiv.getValue().getId());
-//        customer.setDivision(CustState.getValue().getDivisionName());
-//        customer.setCountryId(CustCountry.getValue().getCountryId());
-//        customer.setCountry(CustCountry.getValue().getCountryName());
-//        customer.setPostalCode(CustPostal.getText());
-//        customer.setPhone(CustPhone.getText());
-//        if(customer.getAuthor() == null)
-//            customer.setTime(LocalDateTime.now());
-//        customer.setLastUpdate(LocalDateTime.now());
-
-
-
-
-
     }
 
     public void onModifyClick(ActionEvent actionEvent) {

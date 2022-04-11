@@ -137,23 +137,23 @@ public class DBCustomers {
 
     }
 
-    public static boolean deleteCustomer(int selectedCustomerId) {
+    public static Boolean deleteCustomer(Integer selectedCustomerId) throws SQLException {
 
-        try{
-            String sql = "DELETE FROM appointments, customers"
-            + "Where Customer_ID = ?";
+        try {
+        String sql = "DELETE FROM customers "
+        + "WHERE Customer_ID = ?";
 
-            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ps.setInt(selectedCustomerId)
+        ps.setInt(1, selectedCustomerId);
 
-            ps.executeUpdate();
+        ps.executeUpdate();
 
             return true;
-
-        }catch(SQLException e){
+        }
+        catch (SQLException e) {
             e.printStackTrace();
-
-        }return false;
+            return false;
+        }
     }
 }

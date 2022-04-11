@@ -142,4 +142,24 @@ public static void newAppointment(Appointment newAppointment){
         }
     }
 
+    public static Boolean deleteAppointment(Integer selectedCustomerId) throws SQLException {
+
+        try {
+            String sql = "DELETE FROM appointments "
+                    + "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, selectedCustomerId);
+
+            ps.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

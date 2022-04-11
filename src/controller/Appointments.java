@@ -97,6 +97,8 @@ public class Appointments implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
+
+
         ApptTable.setItems(DBAppointments.getAllAppointments());
 
         ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
