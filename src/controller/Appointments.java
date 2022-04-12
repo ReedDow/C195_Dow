@@ -17,6 +17,7 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -58,19 +59,19 @@ public class Appointments implements Initializable {
     @FXML
     private Button UpdateAppt;
     @FXML
-    private ComboBox CustId;
+    private ComboBox<String> CustId;
     @FXML
-    private ComboBox UserId;
+    private ComboBox<String> UserId;
     @FXML
     private Button BackBtn;
     @FXML
     private ComboBox MonthList;
     @FXML
-    private ComboBox TypeList;
+    private ComboBox<String> TypeList;
     @FXML
     private Button CreateReportBtn;
     @FXML
-    private static ComboBox ContactList;
+    private ComboBox<String> ContactList;
     @FXML
     private Button GenerateContactSchedule;
     @FXML
@@ -82,9 +83,9 @@ public class Appointments implements Initializable {
     @FXML
     private TextField Location;
     @FXML
-    private ComboBox Contact;
+    private ComboBox<String> Contact;
     @FXML
-    private ComboBox Type;
+    private ComboBox<String> Type;
     @FXML
     private DatePicker Date;
     @FXML
@@ -92,7 +93,7 @@ public class Appointments implements Initializable {
     @FXML
     private TextField EndTime;
 
-    private static Contact selectedContact;
+    private static String selectedContact;
 
     ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
 
@@ -110,7 +111,7 @@ public class Appointments implements Initializable {
             ContactList.setItems(DBAppointments.getAllContacts());
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+       }
 
         try {
             Type.setItems(DBAppointments.getAllTypes());
@@ -152,8 +153,28 @@ public class Appointments implements Initializable {
 
     }
 
+    static boolean confirm(String title, String header, String content){
+        Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+        alert2.setTitle(title);
+        alert2.setHeaderText(header);
+        alert2.setContentText(content);
 
-    public void cancelClick(ActionEvent actionEvent) {
+        Optional<ButtonType> result = alert2.showAndWait();
+        if (result.get() == ButtonType.OK)
+            return true;
+        else return false;
+    }
+
+    /**This method redirects to the previous page after a confirmation dialog returns true upon "OK" click */
+    public void cancelClick(ActionEvent actionEvent) throws IOException {
+        if(confirm("Warning - Leaving page", "Any unsaved data will be lost", "Would you like to leave this page?")){
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Customers");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void deleteClick(ActionEvent actionEvent) {
@@ -177,22 +198,30 @@ public class Appointments implements Initializable {
     public void createReportClick(ActionEvent actionEvent) {
     }
 
-    public void contactScheduleClick(ActionEvent actionEvent){
+    public static String getSelectedContact(){return selectedContact; }
 
-        String selectedContact = String.valueOf(ContactList.getValue());
-    }
+    public void contactScheduleClick(ActionEvent actionEvent) throws IOException {
 
-    public static Object getSelectedContact(){return selectedContact; }
+        selectedContact = String.valueOf(ContactList.getValue());
 
-
-
-    public void backClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
-        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/view/ContactSchedule.fxml"));
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        stage.setTitle("Appointments");
+        stage.setTitle("Modify Part");
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**This method redirects to the previous page after a confirmation dialog returns true upon "Yes" click */
+    public void backClick(ActionEvent actionEvent) throws IOException {
+        if(confirm("Warning - Leaving page", "Any unsaved data will be lost", "Would you like to leave this page?")){
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Customers");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
 

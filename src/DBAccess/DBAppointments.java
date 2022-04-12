@@ -10,6 +10,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DBAppointments {
 
@@ -18,7 +20,13 @@ public class DBAppointments {
     public static Appointment getAppointment(int aId) {
 
         try {
-            String sql = "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID and appointments.Appointments_ID=" + aId;
+            String sql =
+//                    "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID and appointments.Appointments_ID=" + aId;
+
+                    "SELECT * FROM appointments a" +
+                            "INNER JOIN customers c " +
+                            "WHERE a.Customer_ID = c.Customer_ID" +
+                            " AND a.Appointment_ID = " + aId;
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 
@@ -91,6 +99,60 @@ public class DBAppointments {
             e.printStackTrace();
         }
         return aList;
+    }
+
+    public static ObservableList<Appointment> getApptTimeRange(ZonedDateTime startRange, ZonedDateTime endRange)
+            throws SQLException {
+
+        String sql = "SELECT * FROM appointments a " +
+                "INNER JOIN customers c" +
+                "WHERE a.Customer_ID = c.Customer_ID " +
+                "INNER JOIN users u "  +
+                "ON a.User_ID = u.User_ID " +
+                "LEFT OUTER JOIN contacts c " +
+                "ON a.Contact_ID = c.Contact_ID WHERE" +
+                " Start between ? AND ?";
+
+        ObservableList<Appointment> apptTimeRange = FXCollections.observableArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+        String startRangeString = startRange.format(formatter);
+        String endRangeString = endRange.format(formatter);
+
+        ps.setString(1, startRangeString);
+        ps.setString(2, endRangeString);
+
+        ResultSet rs = ps.executeQuery();
+
+        while( rs.next() ) {
+            Integer appointmentId = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String description = rs.getString("Description");
+            String location = rs.getString("Location");
+            String type = rs.getString("Type");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+            LocalDateTime createTime = rs.getTimestamp("Create_Date").toLocalDateTime();
+            String author = rs.getString("Created_by");
+            LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+            String updateAuthor = rs.getString("Last_Updated_By");
+            Integer customerId = rs.getInt("Customer_ID");
+            Integer userId = rs.getInt("User_ID");
+            Integer contactId = rs.getInt("Contact_ID");
+            String contactName = rs.getString("Contact_Name");
+            String userName = rs.getString("User_Name");
+            String customerName = rs.getString("Customer_Name");
+
+            Appointment appointment = new Appointment(
+                    appointmentId, title, description, location, type, start, end, createTime, author, lastUpdate, updateAuthor, customerId, customerName, contactId, contactName, userId, userName
+            );
+            apptTimeRange.add(appointment);
+        }
+
+        return apptTimeRange;
+
     }
 
 public static void newAppointment(Appointment newAppointment){
@@ -258,13 +320,18 @@ public static void newAppointment(Appointment newAppointment){
     }
 
 
-    public static ObservableList<Contact> getContactSchedule(String contactName) {
-        ObservableList<Contact> cList = FXCollections.observableArrayList();
+    public static ObservableList<Appointment> getContactSchedule(String contactName) {
+        ObservableList<Appointment> aList = FXCollections.observableArrayList();
         try {
             String sql = "SELECT * "
-                    + "FROM appointments"
+                    + "FROM appointments AS a "
+                    + "INNER JOIN customers AS c "
+                    + "ON a.Customer_ID = c.Customer_ID "
+                    + "INNER JOIN users AS u "
+                    + "ON a.User_ID = u.User_ID "
                     + "INNER JOIN contacts "
                     + "WHERE Contact_Name = ?";
+
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
@@ -276,27 +343,30 @@ public static void newAppointment(Appointment newAppointment){
                 int appointmentId = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
                 String description = rs.getString("Description");
+                String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                String start = rs.getString("Start");
-                String end = rs.getString("End");
-                int customerId = rs.getInt("Customer_ID");
+                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+                LocalDateTime createTime = rs.getTimestamp("Create_Date").toLocalDateTime();
+                String author = rs.getString("Created_By");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                String updateAuthor = rs.getString("Last_Updated_By");
+                Integer customerId = rs.getInt("Customer_ID");
+               String customerName = rs.getString("Customer_Name");
+                Integer contactId = rs.getInt("Contact_ID");
+//                String contactName = rs.getString("Contact_Name");
+                Integer userId = rs.getInt("User_ID");
+                String userName = rs.getString("User_Name");
 
-                Contact newContactSchedule = new Contact();
-                newContactSchedule.setAppointmentId(appointmentId);
-                newContactSchedule.setTitle(title);
-                newContactSchedule.setDescription(description);
-                newContactSchedule.setType(type);
-                newContactSchedule.setStart(LocalDateTime.parse(start));
-                newContactSchedule.setEnd(LocalDateTime.parse(end));
-                newContactSchedule.setCustomerId(customerId);
+                Appointment A = new Appointment(appointmentId, title, description, location, type, start, end, createTime, author, lastUpdate, updateAuthor, customerId, customerName, contactId, contactName, userId, userName);
 
-                cList.add(newContactSchedule);
+                aList.add(A);
             }
-            return cList;
+
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return aList;
     }
 
 

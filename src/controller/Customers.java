@@ -141,14 +141,16 @@ public class Customers implements Initializable{
             return;}
     }
 
-
-    public void onCancelClick(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Login");
-        stage.setScene(scene);
-        stage.show();
+    /**This method redirects to the previous page after a confirmation dialog returns true upon "OK" click */
+    public void onCancelClick(ActionEvent actionEvent) throws IOException {
+        if(confirm("Warning - Leaving page", "Any unsaved data will be lost", "Would you like to leave this page?")){
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+            Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Login");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void onAddClick(ActionEvent actionEvent) throws IOException, SQLException {
@@ -189,6 +191,11 @@ public class Customers implements Initializable{
     }
 
     public void onModifyClick(ActionEvent actionEvent) {
+        CustID.setText(String.valueOf(CustIdCol));
+        CustName.setText(String.valueOf(CustNameCol));
+        CustAddress.setText(String.valueOf(CustAddressCol));
+        CustPostal.setText(String.valueOf(CustPostCol));
+        CustPhone.setText(String.valueOf(CustPhoneCol));
     }
 
     public void onSaveClick(ActionEvent actionEvent) {

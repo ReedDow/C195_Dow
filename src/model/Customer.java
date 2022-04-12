@@ -134,7 +134,6 @@ public class Customer {
         this.lastUpdateAuthor = lastUpdateAuthor;
     }
 
-
     /**set method for division id*/
     public void setDivisionId(Integer divisionId) {
         this.divisionId = divisionId;
@@ -155,6 +154,10 @@ public class Customer {
         this.countryId = countryId;
     }
 
+    @Override
+    public String toString(){
+        return getName();
+    }
 
 
 }

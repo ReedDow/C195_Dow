@@ -6,9 +6,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="ContactScheduleAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactSchedule">
+<?import javafx.scene.text.Font?>
+<AnchorPane fx:id="ContactScheduleAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactSchedule">
     <children>
-        <TableView fx:id="ApptTable" layoutX="337.0" layoutY="97.0" prefHeight="316.0" prefWidth="802.0">
+        <TableView fx:id="ApptTable" layoutX="40" layoutY="50" prefHeight="250.0" prefWidth="600.0">
             <columns>
                 <TableColumn fx:id="ApptIdCol" prefWidth="102.0" text="Appointment ID" />
                 <TableColumn fx:id="TitleCol" prefWidth="48.0" text="Title" />
@@ -17,7 +18,13 @@
                 <TableColumn fx:id="StartCol" prefWidth="100.0" text="Start Date/Time" />
                 <TableColumn fx:id="EndCol" prefWidth="93.0" text="End Date/Time" />
                 <TableColumn fx:id="CustIdCol" prefWidth="82.0" text="Customer ID" />
-
             </columns>
         </TableView>
-        <Button fx:id="CancelBtn" layoutX="1065.0" layoutY="423.0" mnemonicParsing="false" onAction="#cancelClick" prefHeight="25.0" prefWidth="52.0" text="Cancel" />
+        <Label fx:id="ScheduleName" layoutX="5.0" layoutY="5.0" text="ScheduleName" textFill="#7c0202">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Button fx:id="CancelBtn" layoutX="500.0" layoutY="310.0" mnemonicParsing="false" onAction="#cancelClick" prefHeight="25.0" prefWidth="52.0" text="Cancel" />
+    </children>
+</AnchorPane>

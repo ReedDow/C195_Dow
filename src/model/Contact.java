@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class Contact {
 
     private int appointmentId;
+    private String contactName;
     private String title;
     private String description;
     private String type;
@@ -12,7 +13,8 @@ public class Contact {
     private LocalDateTime end;
     private int customerId;
 
-    public Contact(int appointmentId, String title, int customerId, LocalDateTime end, LocalDateTime start, String type, String description){
+
+    public Contact(int appointmentId, String title, int customerId, String description, String type, LocalDateTime end, LocalDateTime start){
         appointmentId = appointmentId;
 
 

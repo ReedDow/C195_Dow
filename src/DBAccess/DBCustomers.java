@@ -73,9 +73,6 @@ public class DBCustomers {
         return cList;
     }
 
-
-
-
     /**Add new customer method*/
     public static void newCustomer(String country, String name, String address, String division, String postalCode, String phone, int divisionId){
         try{
@@ -105,6 +102,7 @@ public class DBCustomers {
     }
 
     public static void modifyCustomer(Customer customer){
+
 
     }
 
