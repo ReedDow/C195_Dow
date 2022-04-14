@@ -166,17 +166,29 @@ public class Appointments implements Initializable {
 
     }
 
-    static boolean confirm(String title, String header, String content){
-        Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-        alert2.setTitle(title);
-        alert2.setHeaderText(header);
-        alert2.setContentText(content);
+    /**This method sets an information alert that can be customized in subsequent methods.
+     *  * @param title The title of the alert. * @param header the header message of the alert.
+     *  * @param content the main message of the alert. */
 
-        Optional<ButtonType> result = alert2.showAndWait();
-        if (result.get() == ButtonType.OK)
-            return true;
-        else return false;
-    }
+    public boolean alert(String title, String header, String content) {
+        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+        alert1.setTitle(title);    alert1.setHeaderText(header);
+        alert1.setContentText(content);    alert1.showAndWait();
+        return true;}
+
+    /**This method sets a confirmation alert that can be customized in subsequent methods.
+     * * @param title The title of the alert. * @param header the header message of the alert.
+     * * @param content the main message of the alert. * @return returns true if user clicks "OK" and false if user clicks "Cancel".*/
+    static boolean confirm(String title, String header, String content){
+         Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+         alert2.setTitle(title);
+         alert2.setHeaderText(header);
+         alert2.setContentText(content);
+         Optional<ButtonType> result = alert2.showAndWait();
+         if (result.get() == ButtonType.OK)
+             return true;
+         else return false;}
+
 
     /**This method redirects to the previous page after a confirmation dialog returns true upon "OK" click */
     public void cancelClick(ActionEvent actionEvent) throws IOException {
@@ -257,21 +269,24 @@ public class Appointments implements Initializable {
         String startDate  = String.valueOf(StartDate.getValue());
         String endDate = String.valueOf(EndDate.getValue());
         String type = String.valueOf(Type.getValue());
-        int custId = Integer.parseInt(CustId.getValue());
-        int userId = Integer.parseInt(UserId.getValue());
+        Integer custId = Integer.parseInt(CustId.getValue());
+        Integer userId = Integer.parseInt(UserId.getValue());
 
-//        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate.isEmpty() || type.isEmpty() || custId.isEmpty() || userId.isEmpty() ){
-//
-//            alert("Error", "Invalid input", "All fields must be filled");
-//        }
-//
-//        else {
-//
-//            DBCustomers.newCustomer(country, name, address, division, postalCode, phone, divisionId);
+        String start = (startTime + ":" + startDate);
+        String end = (endTime + ":" + endDate);
+;
+        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate.isEmpty() || type.isEmpty() || custId == null || userId == null ){
 
-//
-//            added = true;
-//        }
+            alert("Error", "Invalid input", "All fields must be filled");
+        }
+
+        else {
+
+           // DBAppointments.newAppointment(title, description, location, type, start, end, custId, userId);
+
+
+            added = true;
+        }
 
         if (added) {
 
