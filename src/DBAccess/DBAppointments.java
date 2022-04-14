@@ -101,16 +101,16 @@ public class DBAppointments {
         return aList;
     }
 
-    public static ObservableList<Appointment> getApptTimeRange(ZonedDateTime startRange, ZonedDateTime endRange)
+    public static ObservableList<Appointment> getApptTimeRange(LocalDateTime startRange, LocalDateTime timeDescription)
             throws SQLException {
 
         String sql = "SELECT * FROM appointments a " +
-                "INNER JOIN customers c" +
-                "WHERE a.Customer_ID = c.Customer_ID " +
+                "INNER JOIN customers c " +
+                "ON a.Customer_ID = c.Customer_ID " +
                 "INNER JOIN users u "  +
                 "ON a.User_ID = u.User_ID " +
-                "LEFT OUTER JOIN contacts c " +
-                "ON a.Contact_ID = c.Contact_ID WHERE" +
+                "LEFT OUTER JOIN contacts t " +
+                "ON a.Contact_ID = t.Contact_ID WHERE" +
                 " Start between ? AND ?";
 
         ObservableList<Appointment> apptTimeRange = FXCollections.observableArrayList();
@@ -119,7 +119,7 @@ public class DBAppointments {
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
         String startRangeString = startRange.format(formatter);
-        String endRangeString = endRange.format(formatter);
+        String endRangeString = timeDescription.format(formatter);
 
         ps.setString(1, startRangeString);
         ps.setString(2, endRangeString);

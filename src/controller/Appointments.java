@@ -17,6 +17,9 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -100,6 +103,11 @@ public class Appointments implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        LocalDateTime localDate = LocalDateTime.now();
+        System.out.println(localDate);
+        LocalDateTime month = localDate.plus(1, ChronoUnit.MONTHS);
+        System.out.println(month);
+
 
         try {
             Contact.setItems(DBAppointments.getAllContacts());
@@ -180,13 +188,57 @@ public class Appointments implements Initializable {
     public void deleteClick(ActionEvent actionEvent) {
     }
 
-    public void radioWeekClick(ActionEvent actionEvent) {
+    public void radioWeekClick(ActionEvent actionEvent) throws SQLException {
+        LocalDateTime localDate = LocalDateTime.now();
+        LocalDateTime week = localDate.plus(1, ChronoUnit.WEEKS);
+        ApptTable.setItems(DBAppointments.getApptTimeRange(LocalDateTime.now(), week));
+
+        ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        DescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        LocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        ContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
 
-    public void radioMonthClick(ActionEvent actionEvent) {
+    public void radioMonthClick(ActionEvent actionEvent) throws SQLException {
+        LocalDateTime localDate = LocalDateTime.now();
+        System.out.println(localDate);
+        LocalDateTime month = localDate.plus(1, ChronoUnit.MONTHS);
+        System.out.println(month);
+        ApptTable.setItems(DBAppointments.getApptTimeRange(localDate, month));
+
+        ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        DescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        LocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        ContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
 
     public void radioAllClick(ActionEvent actionEvent) {
+
+        ApptTable.setItems(DBAppointments.getAllAppointments());
+
+        ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        DescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        LocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        ContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
     }
 
     public void addClick(ActionEvent actionEvent) {
