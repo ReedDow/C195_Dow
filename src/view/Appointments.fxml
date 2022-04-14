@@ -92,14 +92,16 @@
             <ComboBox fx:id="Type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Start Date" GridPane.rowIndex="6" />
             <Label text="Start Time" GridPane.rowIndex="7" />
-            <Label text="End Time" GridPane.rowIndex="8" />
-            <DatePicker fx:id="Date" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="StartTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="EndTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <Label text="Customer ID" GridPane.rowIndex="9" />
-            <Label text="User ID" GridPane.rowIndex="10" />
-            <ComboBox fx:id="CustId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox fx:id="UserId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <Label text="End Date" GridPane.rowIndex="8" />
+             <Label text="End Time" GridPane.rowIndex="9" />
+            <DatePicker fx:id="StartDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+             <TextField fx:id="StartTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+             <DatePicker fx:id="EndDate" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="EndTime" promptText="hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Label text="Customer ID" GridPane.rowIndex="10" />
+            <Label text="User ID" GridPane.rowIndex="11" />
+            <ComboBox fx:id="CustId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ComboBox fx:id="UserId" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
          </children>
       </GridPane>
       <Button fx:id="BackBtn" layoutX="1029.0" layoutY="31.0" mnemonicParsing="false" onAction="#backClick" text="Back to Customer" />

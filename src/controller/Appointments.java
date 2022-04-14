@@ -1,12 +1,15 @@
 package controller;
 
 import DBAccess.DBAppointments;
+import DBAccess.DBCustomers;
+import DBAccess.DBDivisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -25,6 +28,10 @@ import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
 
+    @FXML
+    private DatePicker StartDate;
+    @FXML
+    private DatePicker EndDate;
     @FXML
     private TableView<Appointment> ApptTable;
     @FXML
@@ -89,8 +96,6 @@ public class Appointments implements Initializable {
     private ComboBox<String> Contact;
     @FXML
     private ComboBox<String> Type;
-    @FXML
-    private DatePicker Date;
     @FXML
     private TextField StartTime;
     @FXML
@@ -241,7 +246,42 @@ public class Appointments implements Initializable {
 
     }
 
-    public void addClick(ActionEvent actionEvent) {
+    public void addClick(ActionEvent actionEvent) throws IOException {
+        boolean added = false;
+
+        String title = Title.getText();
+        String description = Description.getText();
+        String location = Location.getText();
+        String startTime = StartTime.getText();
+        String endTime = EndTime.getText();
+        String startDate  = String.valueOf(StartDate.getValue());
+        String endDate = String.valueOf(EndDate.getValue());
+        String type = String.valueOf(Type.getValue());
+        int custId = Integer.parseInt(CustId.getValue());
+        int userId = Integer.parseInt(UserId.getValue());
+
+//        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate.isEmpty() || type.isEmpty() || custId.isEmpty() || userId.isEmpty() ){
+//
+//            alert("Error", "Invalid input", "All fields must be filled");
+//        }
+//
+//        else {
+//
+//            DBCustomers.newCustomer(country, name, address, division, postalCode, phone, divisionId);
+
+//
+//            added = true;
+//        }
+
+        if (added) {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Main form");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void updateClick(ActionEvent actionEvent) {

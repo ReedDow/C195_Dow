@@ -180,7 +180,7 @@ public static void newAppointment(Appointment newAppointment){
         }
     }
 
-    public static void updateAppointment(Appointment newAppointment){
+    public static void modifyAppointment(Appointment newAppointment){
         try{
             String sql = "UPDATE appointments Set Title=?, Description=?, Location=?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
 
