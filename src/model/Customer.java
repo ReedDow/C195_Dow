@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**Customer model*/
 public class Customer {
 
-    private int customerId;
+    private Integer customerId;
     private String name;
     private String address;
     private String postalCode;
@@ -42,8 +42,10 @@ public class Customer {
     }
 
     /**Get method for customer id*/
-    public int getCustomerId(
-    ){ return customerId;}
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
 
     /**Get method for name*/
     public String getName(
@@ -74,7 +76,8 @@ public class Customer {
     ){return lastUpdateAuthor;}
 
 
-    /**Get method for division*/
+    /**Get method for division
+     * @return*/
     public String getDivision(
     ){ return division;}
 
@@ -82,7 +85,8 @@ public class Customer {
     public Integer getDivisionId(
     ){ return divisionId;}
 
-    /**Get method for country*/
+    /**Get method for country
+     * @return*/
     public String getCountry(
     ){ return country;}
 

@@ -71,6 +71,7 @@ public class DBCountries {
         }
         return cList;
     }
+
     /**this method adds a country to db */
     public static void addCountry(Country newCountry) {
         try {

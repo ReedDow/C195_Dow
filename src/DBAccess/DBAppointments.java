@@ -155,25 +155,27 @@ public class DBAppointments {
 
     }
 
-public static void newAppointment(Appointment newAppointment){
+public static void newAppointment(String title, String description, String location, String contact, String type, LocalDateTime start, LocalDateTime end,  int custId, int userId){
         try{
             String sql = "INSERT INTO appointments Values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ps.setString(1, newAppointment.getTitle());
-            ps.setString(2, newAppointment.getDescription());
-            ps.setString(3, newAppointment.getLocation());
-            ps.setString(4, newAppointment.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
-            ps.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
-            ps.setTimestamp(7, Timestamp.valueOf(newAppointment.getCreatedTime()));
-            ps.setString(8, newAppointment.getAuthor());
-            ps.setTimestamp(9, Timestamp.valueOf(newAppointment.getLastUpdate()));
-            ps.setString(10, newAppointment.getLastUpdateAuthor());
-            ps.setString(11, String.valueOf(newAppointment.getContactId()));
-            ps.setString(12, String.valueOf(newAppointment.getUserId()));
-            ps.setString(13, String.valueOf(newAppointment.getCustomerId()));
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setTimestamp(5, Timestamp.valueOf(start));
+            ps.setTimestamp(6, Timestamp.valueOf(end));
+            ps.setTimestamp(7,Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(8, DBLogin.getCurrentUser().getUsername());
+            ps.setTimestamp(9,Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(10, DBLogin.getCurrentUser().getUsername());
+            ps.setInt(11, custId);
+            ps.setInt(12, userId);
+            ps.setInt(13, custId);
+
+            ps.executeUpdate();
         }
        catch (SQLException e) {
             e.printStackTrace();
@@ -289,7 +291,7 @@ public static void newAppointment(Appointment newAppointment){
 
         ObservableList<String> uList = FXCollections.observableArrayList();
         try {
-            String sql = "SELECT User_ID FROM appointments";
+            String sql = "SELECT User_ID FROM users";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
@@ -306,7 +308,7 @@ public static void newAppointment(Appointment newAppointment){
 
         ObservableList<String> cList = FXCollections.observableArrayList();
         try {
-            String sql = "SELECT Customer_ID FROM appointments";
+            String sql = "SELECT Customer_ID FROM customers";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);

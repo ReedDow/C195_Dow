@@ -14,11 +14,11 @@ public class DBCustomers {
 
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
-    public static Customer getCustomer(int cId){
+    public static Customer getCustomer(int customerId){
 
         try {
 
-            String sql = "SELECT customers.*, first_level_divisions.Division, first_level_divisions.COUNTRY_ID, countries.Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID and first_level_divisions.COUNTRY_ID = countries.Country_ID and customer.Customer_ID=" + cId;
+            String sql = "SELECT customers.*, first_level_divisions.Division, first_level_divisions.COUNTRY_ID, countries.Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID and first_level_divisions.COUNTRY_ID = countries.Country_ID and customer.Customer_ID=" + customerId;
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
@@ -74,7 +74,7 @@ public class DBCustomers {
     }
 
     /**Add new customer method*/
-    public static void newCustomer(String country, String name, String address, String division, String postalCode, String phone, int divisionId){
+    public static void newCustomer( String name, String address, String postalCode, String phone, int divisionId){
         try{
             String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, "
             + "Created_By, Last_Update, Last_Updated_By, Division_ID) "
@@ -101,10 +101,32 @@ public class DBCustomers {
         }
     }
 
-    public static void modifyCustomer(Customer customer){
+    public static void modifyCustomer(int customerId, String name, String address, String postalCode, String phone, int divisionId){
+        try{
+            String sql = "UPDATE customers "
+                    + "SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, "
+                    + "Last_Update = ?, Last_Updated_By = ?, Division_ID = ? "
+                    + "WHERE customer_ID = " + customerId;
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setString (3, postalCode);
+            ps.setString(4, phone);
+            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(6, DBLogin.getCurrentUser().getUsername());;
+            ps.setInt(7, divisionId);
 
 
+            ps.executeUpdate();
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
+
 
     public static Boolean deleteCustomer(Integer selectedCustomerId) throws SQLException {
 

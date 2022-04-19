@@ -20,8 +20,10 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -108,11 +110,10 @@ public class Appointments implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        LocalDateTime localDate = LocalDateTime.now();
-        System.out.println(localDate);
-        LocalDateTime month = localDate.plus(1, ChronoUnit.MONTHS);
-        System.out.println(month);
-
+        ToggleGroup group = new ToggleGroup();
+        WeekAppts.setToggleGroup(group);
+        MonthAppts.setToggleGroup(group);
+        AllAppts.setToggleGroup(group);
 
         try {
             Contact.setItems(DBAppointments.getAllContacts());
@@ -223,11 +224,6 @@ public class Appointments implements Initializable {
     }
 
     public void radioMonthClick(ActionEvent actionEvent) throws SQLException {
-        LocalDateTime localDate = LocalDateTime.now();
-        System.out.println(localDate);
-        LocalDateTime month = localDate.plus(1, ChronoUnit.MONTHS);
-        System.out.println(month);
-        ApptTable.setItems(DBAppointments.getApptTimeRange(localDate, month));
 
         ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -257,40 +253,52 @@ public class Appointments implements Initializable {
         UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
     }
-
+    /** Adds a new appointment into the DB and populates onto appointment table.
+     * Formats the time/date input from String into LocalDateTime
+     * Checks for empty values and alerts user*/
     public void addClick(ActionEvent actionEvent) throws IOException {
         boolean added = false;
 
         String title = Title.getText();
         String description = Description.getText();
         String location = Location.getText();
+        String contact = String.valueOf(Contact.getValue());
         String startTime = StartTime.getText();
         String endTime = EndTime.getText();
-        String startDate  = String.valueOf(StartDate.getValue());
-        String endDate = String.valueOf(EndDate.getValue());
+        LocalDate startDate  = StartDate.getValue();
+        LocalDate endDate = EndDate.getValue();
         String type = String.valueOf(Type.getValue());
         Integer custId = Integer.parseInt(CustId.getValue());
         Integer userId = Integer.parseInt(UserId.getValue());
 
-        String start = (startTime + ":" + startDate);
-        String end = (endTime + ":" + endDate);
-;
-        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate.isEmpty() || type.isEmpty() || custId == null || userId == null ){
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+
+        try{String endStr = (endDate + " " + endTime);
+            String startStr = (startDate  + " " + startTime);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            start = LocalDateTime.parse(startStr, formatter);
+
+            end = LocalDateTime.parse(endStr, formatter);
+
+        }catch(NumberFormatException e){
+            e.printStackTrace();
+            alert("Error", "Invalid input", " Please use format:   Date yyyy-MM-dd  Time HH:mm");
+        }
+
+       if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
             alert("Error", "Invalid input", "All fields must be filled");
         }
 
         else {
-
-           // DBAppointments.newAppointment(title, description, location, type, start, end, custId, userId);
-
-
+           DBAppointments.newAppointment(title, description, location, contact, type, start, end,  custId, userId);
             added = true;
         }
 
         if (added) {
-
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setTitle("Main form");

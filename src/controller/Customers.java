@@ -4,9 +4,7 @@ import DBAccess.DBAppointments;
 import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBDivisions;
-import javafx.collections.FXCollections;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +23,12 @@ import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Customers implements Initializable{
 
+    public Button modify;
     @FXML
     private TableView<Customer> customerTable;
     @FXML
@@ -58,7 +56,7 @@ public class Customers implements Initializable{
     @FXML
     private ComboBox<Division> CustState;
     @FXML
-    public ComboBox<Country> CustCountry;
+    private ComboBox<Country> CustCountry;
     @FXML
 
 
@@ -131,9 +129,9 @@ public class Customers implements Initializable{
 
             Customer selectedCustomerId = customerTable.getSelectionModel().getSelectedItem();
 
-            DBAppointments.deleteAppointment((selectedCustomerId.getCustomerId()));
-
-            DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId());
+//            DBAppointments.deleteAppointment((selectedCustomerId.getCustomerId(CustIdCol)));
+//
+//            DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId(CustIdCol));
 
             customerTable.setItems(DBCustomers.getAllCustomers());
         }
@@ -172,9 +170,7 @@ public class Customers implements Initializable{
         }
 
         else {
-
-            DBCustomers.newCustomer(country, name, address, division, postalCode, phone, divisionId);
-
+            DBCustomers.newCustomer( name, address, postalCode, phone, divisionId);
 
             added = true;
             }
@@ -190,16 +186,60 @@ public class Customers implements Initializable{
             }
     }
 
-    public void onModifyClick(ActionEvent actionEvent) {
-        CustID.setText(String.valueOf(CustIdCol));
-        CustName.setText(String.valueOf(CustNameCol));
-        CustAddress.setText(String.valueOf(CustAddressCol));
-        CustPostal.setText(String.valueOf(CustPostCol));
-        CustPhone.setText(String.valueOf(CustPhoneCol));
+    public void onModifyClick(ActionEvent actionEvent) throws IOException {
+
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+
+        if(customerTable.getSelectionModel().isEmpty()) {
+            alert("Error", "No customer selected", "Please select customer to modify");
+            return;
+        }
+        else {
+            CustID.setText(customer.getCustomerId().toString());
+            CustName.setText(customer.getName());
+            CustAddress.setText(customer.getAddress());
+            CustPostal.setText(customer.getPostalCode());
+            CustPhone.setText(customer.getPhone());
+//            CustCountry.setItems(DBCountries.getAllCountries());
+//            CustCountry.getSelectionModel().select(customer.getCountry());
+//            CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
+//            CustState.getSelectionModel().select(customer.getCountry());
+        }
     }
 
-    public void onSaveClick(ActionEvent actionEvent) {
+    public void onSaveClick(ActionEvent actionEvent) throws IOException {
 
+        if(confirm("Warning", "Customer selected for modification", "Would you like to modify selected customer?")) {
+
+        boolean added = false;
+        int customerId = Integer.parseInt(CustID.getText());
+        String name = CustName.getText();
+        String address = CustAddress.getText();
+        String division = String.valueOf(CustState.getValue());
+        String country = String.valueOf(CustCountry.getValue());
+        String postalCode = CustPostal.getText();
+        String phone = CustPhone.getText();
+
+        int divisionId = DBDivisions.getDivisionID(division);
+
+        if (name.isEmpty() || address.isEmpty() || division.isEmpty() || country.isEmpty() || postalCode.isEmpty() || phone.isEmpty()) {
+            alert("Error", "Invalid input", "All fields must be filled");
+        }
+
+        else {
+            DBCustomers.modifyCustomer(customerId, name, address, postalCode, phone, divisionId);
+            added = true;
+        }
+
+        if (added) {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Customers.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Main form");
+            stage.setScene(scene);
+            stage.show();
+        }
+        }
     }
 
     public void scheduleClick(ActionEvent event) throws IOException {
@@ -210,5 +250,4 @@ public class Customers implements Initializable{
         stage.setScene(scene);
         stage.show();
     }
-
 }
