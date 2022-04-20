@@ -271,21 +271,13 @@ public class Appointments implements Initializable {
         Integer custId = Integer.parseInt(CustId.getValue());
         Integer userId = Integer.parseInt(UserId.getValue());
 
-        LocalDateTime start = null;
-        LocalDateTime end = null;
+        String endStr = (endDate + " " + endTime);
+        String startStr = (startDate  + " " + startTime);
 
-        try{String endStr = (endDate + " " + endTime);
-            String startStr = (startDate  + " " + startTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            start = LocalDateTime.parse(startStr, formatter);
-
-            end = LocalDateTime.parse(endStr, formatter);
-
-        }catch(NumberFormatException e){
-            e.printStackTrace();
-            alert("Error", "Invalid input", " Please use format:   Date yyyy-MM-dd  Time HH:mm");
-        }
+        LocalDateTime start = LocalDateTime.parse(startStr, formatter);
+        LocalDateTime end = LocalDateTime.parse(endStr, formatter);
 
        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
@@ -308,10 +300,30 @@ public class Appointments implements Initializable {
     }
 
     public void updateClick(ActionEvent actionEvent) {
+        Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
+
+        if(ApptTable.getSelectionModel().isEmpty()) {
+            alert("Error", "No appointment selected", "Please select appointment to update");
+            return;
+        }
+        else {
+            ApptId.setText(appointment.getAppointmentId().toString());
+            Title.setText(appointment.getTitle());
+            Description.setText(appointment.getDescription());
+            Location.setText(appointment.getLocation());
+            Contact.getSelectionModel().select(appointment.getContact());
+            Type.getSelectionModel().select(appointment.getType());
+//            StartDate.getTypeSelector().select(appointment.getStart());
+//            EndDate.getValue().select(appointment.getEnd);
+//            CustCountry.setItems(DBCountries.getAllCountries());
+
+        }
     }
 
     public void createReportClick(ActionEvent actionEvent) {
+
     }
+
 
     public static String getSelectedContact(){return selectedContact; }
 
