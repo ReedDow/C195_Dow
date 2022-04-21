@@ -264,6 +264,8 @@ public static void newAppointment(String title, String description, String locat
     public static Integer getContactID(String contactName) {
 
         try {
+            int conId = 0;
+
             String sql = "SELECT Contact_ID "
                     + "FROM contacts "
                     + "WHERE Contact_Name = ?";
@@ -272,7 +274,7 @@ public static void newAppointment(String title, String description, String locat
 
             ps.setString(1, contactName);
 
-            int conId = 0;
+
 
             ResultSet rs = ps.executeQuery();
 
@@ -371,5 +373,38 @@ public static void newAppointment(String title, String description, String locat
         return aList;
     }
 
+    public static ObservableList<String> getType() throws SQLException {
+        ObservableList<String> tList = FXCollections.observableArrayList();
+
+        String sql = "SELECT type, count(Type) "
+                + "FROM appointments GROUP BY Type";
+
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery(sql);
+
+        while(rs.next()){
+            tList.add(rs.getString("Type"));
+        }
+        return tList;
+    }
+
+
+
+
+
+    public static ObservableList<String> getMonth() throws SQLException {
+        ObservableList<String> mList = FXCollections.observableArrayList();
+
+        String sql = "SELECT MONTHNAME(Start) AS Month, "
+                + "COUNT (MONTH(Start)) FROM appointments GROUP BY Month";
+
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery(sql);
+
+        while(rs.next()){
+            mList.add(rs.getString("Month"));
+        }
+        return mList;
+    }
 
 }

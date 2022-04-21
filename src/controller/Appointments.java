@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBAppointments;
+import DBAccess.DBContacts;
 import DBAccess.DBCustomers;
 import DBAccess.DBDivisions;
 import javafx.collections.FXCollections;
@@ -20,9 +21,7 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -299,29 +298,46 @@ public class Appointments implements Initializable {
         }
     }
 
-    public void updateClick(ActionEvent actionEvent) {
+    public void updateClick(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
+
+//        ZonedDateTime start = appointment.getStart().atZone(ZoneOffset.UTC);
+//
+//        ZonedDateTime localStart = new ZonedDateTime(ZoneId.systemDefault());
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//        String startLocal = localStart.format(formatter);
+
+
 
         if(ApptTable.getSelectionModel().isEmpty()) {
             alert("Error", "No appointment selected", "Please select appointment to update");
             return;
         }
         else {
-            ApptId.setText(appointment.getAppointmentId().toString());
+            //ApptId.setText(appointment.getAppointmentId().toString());
             Title.setText(appointment.getTitle());
             Description.setText(appointment.getDescription());
             Location.setText(appointment.getLocation());
+            Contact.setItems(DBAppointments.getAllContacts());
             Contact.getSelectionModel().select(appointment.getContact());
+            Type.setItems(DBAppointments.getAllTypes());
             Type.getSelectionModel().select(appointment.getType());
-//            StartDate.getTypeSelector().select(appointment.getStart());
-//            EndDate.getValue().select(appointment.getEnd);
-//            CustCountry.setItems(DBCountries.getAllCountries());
+            StartDate.setValue(appointment.getStart().toLocalDate());
+            EndDate.setValue(appointment.getEnd().toLocalDate());
+//            StartTime.setText(startLocal);
+//            EndTime.setText(endLocal);
 
         }
     }
 
-    public void createReportClick(ActionEvent actionEvent) {
-
+    public void createReportClick(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/MonthType.fxml"));
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Modify Part");
+        stage.setScene(scene);
+        stage.show();
     }
 
 

@@ -17,7 +17,6 @@ public class Contact {
     public Contact(int appointmentId, String title, int customerId, String description, String type, LocalDateTime end, LocalDateTime start){
         appointmentId = appointmentId;
 
-
     }
 
     public Contact() {

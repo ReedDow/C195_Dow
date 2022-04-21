@@ -4,13 +4,11 @@ import Database.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Country;
-import model.Customer;
 import model.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class DBCountries {
@@ -72,25 +70,23 @@ public class DBCountries {
         return cList;
     }
 
-    /**this method adds a country to db */
-    public static void addCountry(Country newCountry) {
+    public static ObservableList<String> getCountryNames() throws SQLException {
+
+        ObservableList<String> cList = FXCollections.observableArrayList();
         try {
-            String sql = "INSERT INTO countries VALUES (?, ?, ?, ?, ?)";
+            String sql = "SELECT Country FROM countries";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
 
-
-            ps.setString(1, newCountry.getCountryName());
-            ps.setTimestamp(2, Timestamp.valueOf(newCountry.getCreateDate()));
-            ps.setString(3, newCountry.getAuthor());
-            ps.setTimestamp(4, Timestamp.valueOf(newCountry.getLastUpdate()));
-            ps.setString(5, newCountry.getLastUpdateAuthor());
-            ps.executeUpdate();
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            while(rs.next()){
+                cList.add(rs.getString("Country"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return cList;
     }
+
 
     public static void modifyCountry(Country country){
         try {

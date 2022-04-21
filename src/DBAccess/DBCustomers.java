@@ -14,25 +14,21 @@ public class DBCustomers {
 
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
-    public static Customer getCustomer(int customerId){
+    public static ObservableList<String> getCustomerNames() throws SQLException {
 
+        ObservableList<String> cList = FXCollections.observableArrayList();
         try {
-
-            String sql = "SELECT customers.*, first_level_divisions.Division, first_level_divisions.COUNTRY_ID, countries.Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID and first_level_divisions.COUNTRY_ID = countries.Country_ID and customer.Customer_ID=" + customerId;
+            String sql = "SELECT Customer_Name FROM customers";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 
-            if (rs.next()) {
-                Customer customer = new Customer();
-                customer.setName(rs.getString("customerName"));
-                ps.close();
-                return customer;
+            while(rs.next()){
+                cList.add(rs.getString("Customer_Name"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
+            e.printStackTrace();
+        }return cList;
     }
 
 
@@ -147,4 +143,5 @@ public class DBCustomers {
             return false;
         }
     }
+
 }

@@ -186,7 +186,7 @@ public class Customers implements Initializable{
             }
     }
 
-    public void onModifyClick(ActionEvent actionEvent) throws IOException {
+    public void onModifyClick(ActionEvent actionEvent) throws IOException, SQLException {
 
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
 
@@ -200,7 +200,7 @@ public class Customers implements Initializable{
             CustAddress.setText(customer.getAddress());
             CustPostal.setText(customer.getPostalCode());
             CustPhone.setText(customer.getPhone());
-//            CustCountry.setItems(DBCountries.getAllCountries());
+            CustCountry.setItems(DBCountries.getAllCountries());
 //            CustCountry.getSelectionModel().select(customer.getCountry());
 //            CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
 //            CustState.getSelectionModel().select(customer.getCountry());
