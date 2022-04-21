@@ -284,7 +284,7 @@ public class Appointments implements Initializable {
         }
 
         else {
-           DBAppointments.newAppointment(title, description, location, contact, type, start, end,  custId, userId);
+           DBAppointments.newAppointment(title, description, location, contact, type, start, end, custId, userId);
             added = true;
         }
 

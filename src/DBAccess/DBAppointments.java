@@ -101,6 +101,23 @@ public class DBAppointments {
         return aList;
     }
 
+    public static ObservableList<String> getApptStarts() throws SQLException {
+
+        ObservableList<String> cList = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT Start FROM appointments";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next()){
+                cList.add(rs.getString("Start"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }return cList;
+    }
+
     public static ObservableList<Appointment> getApptTimeRange(LocalDateTime startRange, LocalDateTime timeDescription)
             throws SQLException {
 

@@ -1,6 +1,10 @@
 package controller;
 
+import DBAccess.DBAppointments;
 import DBAccess.DBLogin;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +13,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Log;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,7 +27,10 @@ import java.util.ResourceBundle;
 public class Login implements Initializable {
 
     @FXML
-    public Label title;
+    private Label title;
+
+    @FXML
+    private Label UpcomingAppointments;
 
     @FXML
     private Label LabelLocation;
@@ -46,6 +56,11 @@ public class Login implements Initializable {
     /**This method finds the user's location and initializes text language based on location*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+        try {
+            appointmentAlert();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Locale locale = Locale.getDefault();
         resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
         LabelLocation.setText(ZoneId.systemDefault().toString());
@@ -69,6 +84,30 @@ public class Login implements Initializable {
         alert1.setContentText(aContent);
         alert1.showAndWait();
         return true;
+    }
+
+    public void appointmentAlert() throws SQLException {
+        ObservableList<Appointment> appointments = DBAppointments.getAllAppointments();
+
+        LocalDateTime currentTimePlus15Min = LocalDateTime.now().plusMinutes(15);
+
+        ObservableList aList = DBAppointments.getApptStarts();
+       System.out.println(aList);
+
+        for (Appointment appointment : appointments) {
+            LocalDateTime apptStart = appointment.getStart();
+            if (apptStart.isBefore(currentTimePlus15Min) || apptStart.isEqual(currentTimePlus15Min)) {
+                int apptId = appointment.getAppointmentId();
+                LocalDateTime time = apptStart;
+            }
+        }
+
+//        for(Object i : aList){
+//            System.out.println(i);
+//            System.out.println((LocalDateTime.now()));
+//            if ((aList.isAfter(currentTimeMinus15Min) || startTime.isEqual(currentTimeMinus15Min)) && (startTime.isBefore(currentTimePlus15Min) || (startTime.isEqual(currentTimePlus15Min)))){
+//        }
+
     }
 
 /**This method checks the input username and password against the users table in the DB to allow login.
