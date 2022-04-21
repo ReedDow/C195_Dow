@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBAppointments;
+import DBAccess.DBCustomers;
 import DBAccess.DBLogin;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Log;
@@ -25,6 +27,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
+
+    @FXML
+    private Label apptLabel;
 
     @FXML
     private Label title;
@@ -71,6 +76,8 @@ public class Login implements Initializable {
         aTitle = resourceBundle.getString("aTitle");
         aHeader = resourceBundle.getString("aHeader");
         aContent = resourceBundle.getString("aContent");
+        UpcomingAppointments.setText(resourceBundle.getString("UpcomingAppointments"));
+        apptLabel.setText(resourceBundle.getString("apptLabel"));
     }
 
     /**This method sets an information alert that can be customized in subsequent methods.
@@ -89,25 +96,20 @@ public class Login implements Initializable {
     public void appointmentAlert() throws SQLException {
         ObservableList<Appointment> appointments = DBAppointments.getAllAppointments();
 
-        LocalDateTime currentTimePlus15Min = LocalDateTime.now().plusMinutes(15);
-
-        ObservableList aList = DBAppointments.getApptStarts();
-       System.out.println(aList);
+        LocalDateTime add15 = LocalDateTime.now().plusMinutes(15);
 
         for (Appointment appointment : appointments) {
             LocalDateTime apptStart = appointment.getStart();
-            if (apptStart.isBefore(currentTimePlus15Min) || apptStart.isEqual(currentTimePlus15Min)) {
+            if (apptStart.isBefore(add15) && apptStart.isAfter(LocalDateTime.now())) {
                 int apptId = appointment.getAppointmentId();
                 LocalDateTime time = apptStart;
+
+                UpcomingAppointments.setText("Id: " + apptId + " " + "Time: " + time);
+                System.out.println("Id: " + apptId + " " + "Date/Time: " + time);
+            }
+            else { UpcomingAppointments.setText("No appointments within 15 minutes.");
             }
         }
-
-//        for(Object i : aList){
-//            System.out.println(i);
-//            System.out.println((LocalDateTime.now()));
-//            if ((aList.isAfter(currentTimeMinus15Min) || startTime.isEqual(currentTimeMinus15Min)) && (startTime.isBefore(currentTimePlus15Min) || (startTime.isEqual(currentTimePlus15Min)))){
-//        }
-
     }
 
 /**This method checks the input username and password against the users table in the DB to allow login.
