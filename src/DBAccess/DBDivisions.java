@@ -49,7 +49,7 @@ public class DBDivisions {
     public static ObservableList<Division> getAllDivisions(){
          ObservableList<Division> dList = FXCollections.observableArrayList();
          try{
-             String sql="SELECT first_level_divisions.*, countries.Country FROM first_level_divisions JOIN countries on first_level_divisions.Country_ID=countries.Country_ID)";
+             String sql="SELECT first_level_divisions.*, countries.Country FROM first_level_divisions JOIN countries on first_level_divisions.Country_ID=countries.Country_ID";
 
              PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
              ResultSet rs = ps.executeQuery();

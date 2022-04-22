@@ -11,10 +11,10 @@ import java.sql.SQLException;
 
 public class DBUser {
 
-    public static int getUserId(String user){
+    public static int getUserId(){
         int userId = 0;
         try {
-            String sql = "SELECT * FROM user WHERE userName = ?";
+            String sql = "SELECT User_ID FROM user";
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 

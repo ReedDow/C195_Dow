@@ -76,8 +76,8 @@ public class Login implements Initializable {
         aTitle = resourceBundle.getString("aTitle");
         aHeader = resourceBundle.getString("aHeader");
         aContent = resourceBundle.getString("aContent");
-        UpcomingAppointments.setText(resourceBundle.getString("UpcomingAppointments"));
-        apptLabel.setText(resourceBundle.getString("apptLabel"));
+//        UpcomingAppointments.setText(resourceBundle.getString("UpcomingAppointments"));
+//        apptLabel.setText(resourceBundle.getString("apptLabel"));
     }
 
     /**This method sets an information alert that can be customized in subsequent methods.

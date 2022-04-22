@@ -1,9 +1,6 @@
 package controller;
 
-import DBAccess.DBAppointments;
-import DBAccess.DBContacts;
-import DBAccess.DBCustomers;
-import DBAccess.DBDivisions;
+import DBAccess.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -301,21 +298,22 @@ public class Appointments implements Initializable {
     public void updateClick(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
 
-//        ZonedDateTime start = appointment.getStart().atZone(ZoneOffset.UTC);
-//
-//        ZonedDateTime localStart = new ZonedDateTime(ZoneId.systemDefault());
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-//        String startLocal = localStart.format(formatter);
+        ZonedDateTime start = appointment.getStart().atZone(ZoneOffset.UTC);
+        ZonedDateTime end = appointment.getEnd().atZone(ZoneOffset.UTC);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
+        LocalDateTime lbStart = start.toLocalDateTime();
+        LocalDateTime lbEnd = end.toLocalDateTime();
+        String startLocal = lbStart.format(formatter);
+        String endLocal = lbEnd.format(formatter);
 
         if(ApptTable.getSelectionModel().isEmpty()) {
             alert("Error", "No appointment selected", "Please select appointment to update");
             return;
         }
         else {
-            //ApptId.setText(appointment.getAppointmentId().toString());
+            ApptId.setText(Integer.toString(appointment.getAppointmentId()));
             Title.setText(appointment.getTitle());
             Description.setText(appointment.getDescription());
             Location.setText(appointment.getLocation());
@@ -325,8 +323,11 @@ public class Appointments implements Initializable {
             Type.getSelectionModel().select(appointment.getType());
             StartDate.setValue(appointment.getStart().toLocalDate());
             EndDate.setValue(appointment.getEnd().toLocalDate());
-//            StartTime.setText(startLocal);
-//            EndTime.setText(endLocal);
+            StartTime.setText(startLocal);
+            EndTime.setText(endLocal);
+//            CustId.setItems(DBCustomers.getAllCustomers());
+            CustId.getSelectionModel().select(appointment.getCustomerId());
+//            UserId.setItems(DBUser.getUserId());
 
         }
     }

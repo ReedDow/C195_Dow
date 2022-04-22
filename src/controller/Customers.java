@@ -66,7 +66,6 @@ public class Customers implements Initializable{
         String selectedCountry = String.valueOf(CustCountry.getValue());
 
         CustState.setItems(DBDivisions.getSelectedDivisions(selectedCountry));
-
     }
 
     @Override
@@ -201,9 +200,21 @@ public class Customers implements Initializable{
             CustPostal.setText(customer.getPostalCode());
             CustPhone.setText(customer.getPhone());
             CustCountry.setItems(DBCountries.getAllCountries());
-//            CustCountry.getSelectionModel().select(customer.getCountry());
-//            CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
-//            CustState.getSelectionModel().select(customer.getCountry());
+            Country country = null;
+            for (Country c : DBCountries.getAllCountries()){
+                if(c.getCountryName().equals(customer.getCountry())){
+                    country = c;
+                }
+            }
+            CustCountry.getSelectionModel().select(country);
+            CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
+            Division division = null;
+            for (Division d : DBDivisions.getAllDivisions()){
+                if(d.getDivisionName().equals(customer.getDivision())){
+                    division = d;
+                }
+            }
+            CustState.getSelectionModel().select(division);
         }
     }
 
