@@ -3,11 +3,13 @@ package DBAccess;
 import Database.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Country;
 import model.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class DBUser {
 
@@ -27,6 +29,37 @@ public class DBUser {
         }
         return userId;
     }
+
+    public static ObservableList<User> getAllUsers(){
+        ObservableList<User> uList = FXCollections.observableArrayList();
+
+        try {
+
+            String sql = "SELECT * FROM users";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while (rs.next()) {
+                int userId = rs.getInt("User_ID");
+                String username = rs.getString("User_Name");
+                String password = rs.getString("Password");
+                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                String author = rs.getString("Created_By");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                String lastUpdateAuthor = rs.getString("Last_Updated_By");
+
+
+                User U = new User(userId, username, password, createDate, author, lastUpdate, lastUpdateAuthor);
+
+                uList.add(U);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }return uList;
+    }
+
 
     public static void getUsers(String Username, String Password) {
 

@@ -10,7 +10,14 @@ import java.time.LocalDateTime;
         private String author;
         private LocalDateTime lastUpdate;
         private String updatedBy;
-        private static String loggedUser;
+
+        public User(int userId, String username, String password, LocalDateTime createDate, String author, LocalDateTime lastUpdate, String lastUpdateAuthor) {
+        }
+
+        public User() {
+
+        }
+
 
         //set methods
 
@@ -43,10 +50,6 @@ import java.time.LocalDateTime;
             this.updatedBy = updatedBy;
         }
 
-        public void setLoggedUser(String loggedUser) {
-            this.loggedUser = loggedUser;
-        }
-
         //get methods
         public int getUserId() {
             return userId;
@@ -76,7 +79,4 @@ import java.time.LocalDateTime;
             return updatedBy;
         }
 
-        public String getLoggedUser() {
-            return loggedUser;
-        }
 }

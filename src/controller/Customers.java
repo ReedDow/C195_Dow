@@ -199,6 +199,7 @@ public class Customers implements Initializable{
             CustAddress.setText(customer.getAddress());
             CustPostal.setText(customer.getPostalCode());
             CustPhone.setText(customer.getPhone());
+
             CustCountry.setItems(DBCountries.getAllCountries());
             Country country = null;
             for (Country c : DBCountries.getAllCountries()){
@@ -207,6 +208,7 @@ public class Customers implements Initializable{
                 }
             }
             CustCountry.getSelectionModel().select(country);
+
             CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
             Division division = null;
             for (Division d : DBDivisions.getAllDivisions()){

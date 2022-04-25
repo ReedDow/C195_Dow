@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -317,9 +318,9 @@ public class Appointments implements Initializable {
             Title.setText(appointment.getTitle());
             Description.setText(appointment.getDescription());
             Location.setText(appointment.getLocation());
-            Contact.setItems(DBAppointments.getAllContacts());
+//            Contact.setItems(DBAppointments.getAllContacts());
             Contact.getSelectionModel().select(appointment.getContact());
-            Type.setItems(DBAppointments.getAllTypes());
+//            Type.setItems(DBAppointments.getAllTypes());
             Type.getSelectionModel().select(appointment.getType());
             StartDate.setValue(appointment.getStart().toLocalDate());
             EndDate.setValue(appointment.getEnd().toLocalDate());
@@ -327,8 +328,51 @@ public class Appointments implements Initializable {
             EndTime.setText(endLocal);
 //            CustId.setItems(DBCustomers.getAllCustomers());
             CustId.getSelectionModel().select(appointment.getCustomerId());
-//            UserId.setItems(DBUser.getUserId());
 
+//            UserId.setItems(DBUser.getAllUsers());
+            User user = null;
+            for (User u : DBUser.getAllUsers()){
+                if(String.valueOf(u.getUserId()).equals(String.valueOf((appointment.getUserId())))){
+                    user = u;
+                }
+            }
+
+            UserId.getSelectionModel().select(String.valueOf(user));
+        }
+    }
+
+    public void onSaveClick(ActionEvent actionEvent) throws IOException {
+
+        if(confirm("Warning", "Appointment selected for modification", "Would you like to modify selected appointment?")) {
+
+            int appointmentId = Integer.parseInt(ApptId.getText());
+            String title = Title.getText();
+            String description = Description.getText();
+            String location = Location.getText();
+            String contact = String.valueOf(Contact.getValue());
+            String startTime = StartTime.getText();
+            String endTime = EndTime.getText();
+            LocalDate startDate = StartDate.getValue();
+            LocalDate endDate = EndDate.getValue();
+            String type = String.valueOf(Type.getValue());
+            Integer custId = Integer.parseInt(CustId.getValue());
+            Integer userId = Integer.parseInt(UserId.getValue());
+            int contactId = DBContacts.getContactId(contact);
+
+            String endStr = (endDate + " " + endTime);
+            String startStr = (startDate + " " + startTime);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            LocalDateTime start = LocalDateTime.parse(startStr, formatter);
+            LocalDateTime end = LocalDateTime.parse(endStr, formatter);
+
+            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null) {
+
+                alert("Error", "Invalid input", "All fields must be filled");
+            } else {
+                DBAppointments.modifyAppointment(appointmentId, title, description, location, contact, type, start, end, custId, userId, contactId);
+            }
         }
     }
 
@@ -367,6 +411,4 @@ public class Appointments implements Initializable {
             stage.show();
         }
     }
-
-
 }

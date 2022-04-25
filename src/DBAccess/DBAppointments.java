@@ -199,25 +199,28 @@ public static void newAppointment(String title, String description, String locat
         }
     }
 
-    public static void modifyAppointment(Appointment newAppointment){
+    public static void modifyAppointment(int appointmentId, String title, String description,  String location, String contact, String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
         try{
-            String sql = "UPDATE appointments Set Title=?, Description=?, Location=?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            String sql = "UPDATE appointments " +
+                    "Set Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, " +
+                    " Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID? " +
+                    "WHERE Appointment_ID =" + appointmentId;
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ps.setString(1, newAppointment.getTitle());
-            ps.setString(2, newAppointment.getDescription());
-            ps.setString(3, newAppointment.getLocation());
-            ps.setString(4, newAppointment.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
-            ps.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
-            ps.setTimestamp(7, Timestamp.valueOf(newAppointment.getCreatedTime()));
-            ps.setString(8, newAppointment.getAuthor());
-            ps.setTimestamp(9, Timestamp.valueOf(newAppointment.getLastUpdate()));
-            ps.setString(10, newAppointment.getLastUpdateAuthor());
-            ps.setString(11, String.valueOf(newAppointment.getContactId()));
-            ps.setString(12, String.valueOf(newAppointment.getUserId()));
-            ps.setString(13, String.valueOf(newAppointment.getCustomerId()));
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setTimestamp(5, Timestamp.valueOf(start));
+            ps.setTimestamp(6, Timestamp.valueOf(end));
+            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(8, DBLogin.getCurrentUser().getUsername());
+            ps.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(10, DBLogin.getCurrentUser().getUsername());
+            ps.setString(11, String.valueOf(custId));
+            ps.setString(12, String.valueOf(userId));
+            ps.setString(13, String.valueOf(contactId));
         }
         catch (SQLException e) {
             e.printStackTrace();

@@ -68,7 +68,7 @@
         <Button layoutX="45.0" layoutY="334.0" mnemonicParsing="false" onAction="#onAddClick" text="Add Customer" />
         <Button layoutX="150.0" layoutY="334.0" mnemonicParsing="false" onAction="#onModifyClick" text="Modify Customer" />
         <Button layoutX="320.0" layoutY="396.0" mnemonicParsing="false" onAction="#onDeleteClick" text="Delete Customer" />
-        <Button layoutX="125.0" layoutY="396.0" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
+        <Button layoutX="150.0" layoutY="366.0" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
         <Button layoutX="765.0" layoutY="396.0" mnemonicParsing="false" onAction="#onCancelClick" text="Cancel" />
     </children>
 </AnchorPane>

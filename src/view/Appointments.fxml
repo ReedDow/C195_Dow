@@ -38,6 +38,7 @@
       <RadioButton fx:id="AllAppts" layoutX="337.0" layoutY="59.0" mnemonicParsing="false" onAction="#radioAllClick" selected="true" text="All appointments" />
       <Button fx:id="AddAppt" layoutX="31.0" layoutY="496.0" mnemonicParsing="false" onAction="#addClick" text="Add Appointment" />
       <Button fx:id="UpdateAppt" layoutX="164.0" layoutY="496.0" mnemonicParsing="false" onAction="#updateClick" text="Update Appointment" />
+       <Button layoutX="164.0" layoutY="528.0" mnemonicParsing="false" onAction="#onSaveClick" text="Save" />
       <Label layoutX="29.0" layoutY="28.0" text="Appointments" textFill="#7c0202">
          <font>
             <Font name="System Bold" size="20.0" />
