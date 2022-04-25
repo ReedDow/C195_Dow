@@ -416,7 +416,7 @@ public static void newAppointment(String title, String description, String locat
         ObservableList<String> mList = FXCollections.observableArrayList();
 
         String sql = "SELECT MONTHNAME(Start) AS Month, "
-                + "COUNT (MONTH(Start)) FROM appointments GROUP BY Month";
+                + "COUNT(MONTH(Start)) FROM appointments GROUP BY Month";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery(sql);

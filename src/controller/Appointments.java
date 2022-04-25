@@ -26,7 +26,20 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
+    public TableView MonthTable;
+    @FXML
+    private Label ScheduleName;
 
+    @FXML
+    private TableColumn tTotal;
+    @FXML
+    private TableColumn byType;
+    @FXML
+    private TableView TypeTable;
+    @FXML
+    public TableColumn mTotal;
+    @FXML
+    private TableColumn byMonth;
     @FXML
     private DatePicker StartDate;
     @FXML
@@ -73,10 +86,6 @@ public class Appointments implements Initializable {
     private ComboBox<String> UserId;
     @FXML
     private Button BackBtn;
-    @FXML
-    private ComboBox MonthList;
-    @FXML
-    private ComboBox<String> TypeList;
     @FXML
     private Button CreateReportBtn;
     @FXML
@@ -131,12 +140,6 @@ public class Appointments implements Initializable {
         }
 
         try {
-            TypeList.setItems(DBAppointments.getAllTypes());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
             CustId.setItems(DBAppointments.getAllCustomerIds());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,6 +164,24 @@ public class Appointments implements Initializable {
         EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+        try {
+            MonthTable.setItems(DBAppointments.getMonth());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        byMonth.setCellValueFactory(new PropertyValueFactory<>("Month"));
+        mTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
+
+
+        try {
+            TypeTable.setItems(DBAppointments.getType());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        byType.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
 
     }
 
@@ -377,12 +398,23 @@ public class Appointments implements Initializable {
     }
 
     public void createReportClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MonthType.fxml"));
-        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Modify Part");
-        stage.setScene(scene);
-        stage.show();
+        try {
+            MonthTable.setItems(DBAppointments.getMonth());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        byMonth.setCellValueFactory(new PropertyValueFactory<>("Month"));
+        mTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
+
+
+        try {
+            TypeTable.setItems(DBAppointments.getType());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        byType.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
     }
 
 
