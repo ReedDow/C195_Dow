@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class initializes the customer location report page*/
 public class CustomerLocation implements Initializable {
 
     String selectedCustomer;

@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBAppointments;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class initializes the contact schedule page*/
 public class ContactSchedule implements Initializable {
 
     public Button CancelBtn;
@@ -41,9 +43,12 @@ public class ContactSchedule implements Initializable {
     @FXML
     private TableColumn<Appointment, String> EndCol;
     @FXML
-    private TableColumn<Appointment, String> CustIdCol;
+    private TableColumn<Appointment, Integer> CustIdCol;
 
-
+    /**This method populates the contact Schedule for the selected contact upon initialization
+     * The lambda expressions in this method are an alternative way of setting the table columns
+     * and allow for setting data from a different object. This is an example of a String and
+     * Integer set in the table using lambdas.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -55,11 +60,12 @@ public class ContactSchedule implements Initializable {
 
         ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TitleCol.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTitle()) );
         DescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        CustIdCol.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCustomerId()));
 
     }
 

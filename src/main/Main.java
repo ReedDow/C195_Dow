@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**This class creates a scheduling and appointment application*/
 public class Main extends Application {
 
     /**This method loads the initial page and makes the FXML stage.*/
@@ -21,10 +22,6 @@ public class Main extends Application {
         stage.setScene(new Scene(root, 600, 335 ));
         stage.show();
     }
-
-//    public void changeLocale(){
-//        Locale.setDefault(new Locale("fr"));
-//    }
 
     public static void main(String[] args){
         JDBC.makeConnection();
