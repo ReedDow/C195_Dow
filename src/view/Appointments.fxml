@@ -34,7 +34,7 @@
     </TableView>
     <Button fx:id="CancelBtn" layoutX="1065.0" layoutY="423.0" mnemonicParsing="false" onAction="#cancelClick"
             prefHeight="25.0" prefWidth="52.0" text="Cancel"/>
-    <Button fx:id="DeleteBtn" layoutX="357.0" layoutY="423.0" mnemonicParsing="false" onAction="#deleteClick"
+    <Button fx:id="DeleteBtn" layoutX="357.0" layoutY="423.0" mnemonicParsing="false" onAction="#onDeleteClick"
             text="Delete Appointment"/>
     <RadioButton fx:id="WeekAppts" layoutX="475.0" layoutY="59.0" mnemonicParsing="false" onAction="#radioWeekClick"
                  text="Current Week"/>
@@ -101,10 +101,10 @@
     </GridPane>
     <Button fx:id="BackBtn" layoutX="1029.0" layoutY="31.0" mnemonicParsing="false" onAction="#backClick"
             text="Back to Customer"/>
-    <BorderPane layoutX="149.0" layoutY="580.0" prefHeight="98.0" prefWidth="402.0">
+    <BorderPane layoutX="50.0" layoutY="600.0" prefHeight="98.0" prefWidth="402.0">
 
         <top>
-          <Label text="Total Appointments by Month and Type"
+          <Label text="Total appointments by month and type"
                  BorderPane.alignment="CENTER">
               <font>
                   <Font name="System Bold" size="13.0"/>
@@ -116,12 +116,28 @@
                   BorderPane.alignment="CENTER"/>
         </center>
     </BorderPane>
-    <Label layoutX="601.0" layoutY="562.0" text="Tools" textFill="#7c0202">
+    <Label layoutX="570.0" layoutY="532.0" text="Tools" textFill="#7c0202">
         <font>
           <Font name="System Bold" size="20.0"/>
         </font>
     </Label>
-    <BorderPane layoutX="726.0" layoutY="580.0" prefHeight="98.0" prefWidth="351.0">
+    <BorderPane layoutX="420.0" layoutY="600.0" prefHeight="98.0" prefWidth="351.0">
+        <top>
+            <Label text="Generate location for selected customer" BorderPane.alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="13.0"/>
+                </font>
+            </Label>
+        </top>
+        <center>
+            <ComboBox fx:id="CustomerList" prefWidth="150.0" promptText="Customer" BorderPane.alignment="CENTER"/>
+        </center>
+        <bottom>
+            <Button fx:id="GenerateCustomerLocation" mnemonicParsing="false" text="Generate Customer Location"
+                    onAction="#customerLocationClick" BorderPane.alignment="CENTER"/>
+        </bottom>
+    </BorderPane>
+    <BorderPane layoutX="740.0" layoutY="600.0" prefHeight="98.0" prefWidth="351.0">
         <top>
           <Label text="Generate schedule for selected contact" BorderPane.alignment="CENTER">
               <font>

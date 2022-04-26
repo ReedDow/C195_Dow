@@ -11,6 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
@@ -21,14 +24,11 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class initializes the appointments form */
 public class Appointments implements Initializable {
-    public TableView MonthTable;
-    @FXML
-    private Label ScheduleName;
 
     @FXML
     private DatePicker StartDate;
@@ -57,10 +57,7 @@ public class Appointments implements Initializable {
     private TableColumn<Appointment, String> CustIdCol;
     @FXML
     private TableColumn<Appointment, String> UserIdCol;
-    @FXML
-    private Button CancelBtn;
-    @FXML
-    private Button DeleteBtn;
+
     @FXML
     private RadioButton WeekAppts;
     @FXML
@@ -82,6 +79,8 @@ public class Appointments implements Initializable {
     @FXML
     private ComboBox<String> ContactList;
     @FXML
+    private ComboBox<String> CustomerList;
+    @FXML
     private Button GenerateContactSchedule;
     @FXML
     private TextField ApptId;
@@ -101,9 +100,12 @@ public class Appointments implements Initializable {
     private TextField EndTime;
 
     private static String selectedContact;
+    private static String selectedCustomer;
 
     ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
 
+    /**This method populates the appointment table and all comboboxes.
+     * It also initializes the toggle group for radio buttons*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -123,6 +125,13 @@ public class Appointments implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        try {
+            CustomerList.setItems(DBCustomers.getCustomerNames());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         try {
             Type.setItems(DBAppointments.getAllTypes());
@@ -164,9 +173,12 @@ public class Appointments implements Initializable {
      *  * @param content the main message of the alert. */
 
     public boolean alert(String title, String header, String content) {
+
         Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-        alert1.setTitle(title);    alert1.setHeaderText(header);
-        alert1.setContentText(content);    alert1.showAndWait();
+        alert1.setTitle(title);
+        alert1.setHeaderText(header);
+        alert1.setContentText(content);
+        alert1.showAndWait();
         return true;}
 
     /**This method sets a confirmation alert that can be customized in subsequent methods.
@@ -195,8 +207,26 @@ public class Appointments implements Initializable {
         }
     }
 
-    public void deleteClick(ActionEvent actionEvent) {
+    /**This method deletes the selected customer and associated appointments
+     * Error message displays if no customer selected.
+     * Confirmation message displays before after clicking delete. */
+    public void onDeleteClick(ActionEvent actionEvent) throws SQLException {
+        if(ApptTable.getSelectionModel().isEmpty()){
+            alert("Error", "No customer selected", "Please select customer to delete");
+            return;
+        }
+        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments?")) {
+
+            Appointment selectedAppointmentId = ApptTable.getSelectionModel().getSelectedItem();
+
+            DBAppointments.deleteAppointment(selectedAppointmentId.getAppointmentId());
+
+            ApptTable.setItems(DBAppointments.getAllAppointments());
+        }
+        else{alert("Error", "Unable to delete customer", "Please try again");
+            return;}
     }
+    /**Sets radio button to This Week, and updates the appointment table accordingly*/
 
     public void radioWeekClick(ActionEvent actionEvent) throws SQLException {
         LocalDateTime localDate = LocalDateTime.now();
@@ -214,6 +244,7 @@ public class Appointments implements Initializable {
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
+    /**Sets radio button to This Month, and updates the appointment table accordingly*/
 
     public void radioMonthClick(ActionEvent actionEvent) throws SQLException {
 
@@ -228,7 +259,7 @@ public class Appointments implements Initializable {
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
-
+/**Sets radio button to All Appointments, and updates the appointment table accordingly*/
     public void radioAllClick(ActionEvent actionEvent) {
 
         ApptTable.setItems(DBAppointments.getAllAppointments());
@@ -290,7 +321,8 @@ public class Appointments implements Initializable {
             stage.show();
         }
     }
-
+/**This method populates the fields with appointment information from the selected appointment.
+ * If no appointment is selected an error is shown describing the issue. */
     public void updateClick(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
 
@@ -313,18 +345,15 @@ public class Appointments implements Initializable {
             Title.setText(appointment.getTitle());
             Description.setText(appointment.getDescription());
             Location.setText(appointment.getLocation());
-//            Contact.setItems(DBAppointments.getAllContacts());
             Contact.getSelectionModel().select(appointment.getContact());
-//            Type.setItems(DBAppointments.getAllTypes());
+
             Type.getSelectionModel().select(appointment.getType());
             StartDate.setValue(appointment.getStart().toLocalDate());
             EndDate.setValue(appointment.getEnd().toLocalDate());
             StartTime.setText(startLocal);
             EndTime.setText(endLocal);
-//            CustId.setItems(DBCustomers.getAllCustomers());
             CustId.getSelectionModel().select(appointment.getCustomerId());
 
-//            UserId.setItems(DBUser.getAllUsers());
             User user = null;
             for (User u : DBUser.getAllUsers()){
                 if(String.valueOf(u.getUserId()).equals(String.valueOf((appointment.getUserId())))){
@@ -335,7 +364,8 @@ public class Appointments implements Initializable {
             UserId.getSelectionModel().select(String.valueOf(user));
         }
     }
-
+/**This method saves the modified data in the text fields to the DB and repopulates the table with updated information.
+ * It checks for empty fields and overlapping appointments and creates an alert if necessary.*/
     public void onSaveClick(ActionEvent actionEvent) throws IOException {
 
         if(confirm("Warning", "Appointment selected for modification", "Would you like to modify selected appointment?")) {
@@ -370,10 +400,8 @@ public class Appointments implements Initializable {
             }
         }
     }
-
+/**Upon click this method creates a report in an alert box with data showing total appointments by type and month*/
     public void createReportClick(ActionEvent actionEvent) throws IOException {
-        String stringMonth = "";
-        String stringType = "";
         try {
             ObservableList<String> reportMonth = DBAppointments.getMonth();
 
@@ -389,8 +417,9 @@ public class Appointments implements Initializable {
     }
 
 
-    public static String getSelectedContact(){return selectedContact; }
-
+    public static String getSelectedContact(){return selectedContact;
+    }
+/**This method sets the selected contact to the variable selectedContact for use in ContactSchedule controller*/
     public void contactScheduleClick(ActionEvent actionEvent) throws IOException {
 
         selectedContact = String.valueOf(ContactList.getValue());
@@ -398,7 +427,22 @@ public class Appointments implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/view/ContactSchedule.fxml"));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        stage.setTitle("Modify Part");
+        stage.setTitle("Contact Schedule");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static String getSelectedCustomer(){return selectedCustomer;
+    }
+
+    /**This method sets the selected customer to the variable selectedCustomer for use in CustomerLocation controller*/
+    public void customerLocationClick(ActionEvent actionEvent) throws IOException {
+        selectedCustomer = String.valueOf(CustomerList.getValue());
+
+        Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerLocation.fxml"));
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Customer Location");
         stage.setScene(scene);
         stage.show();
     }
@@ -414,4 +458,6 @@ public class Appointments implements Initializable {
             stage.show();
         }
     }
+
+
 }

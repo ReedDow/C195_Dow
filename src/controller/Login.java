@@ -26,8 +26,11 @@ import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
+/** This class initializes the Login form and is the start of the app as specified in main.java*/
 public class Login implements Initializable {
 
+    public Label location;
     @FXML
     private Label apptLabel;
 
@@ -68,7 +71,8 @@ public class Login implements Initializable {
         }
         Locale locale = Locale.getDefault();
         resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
-        LabelLocation.setText(ZoneId.systemDefault().toString());
+        location.setText(ZoneId.systemDefault().toString());
+        LabelLocation.setText(resourceBundle.getString("labelLocation"));
         title.setText(resourceBundle.getString("title"));
         loginBtn.setText(resourceBundle.getString("loginBtn"));
         passwordInput.setPromptText(resourceBundle.getString("passwordInput"));
@@ -77,7 +81,7 @@ public class Login implements Initializable {
         aHeader = resourceBundle.getString("aHeader");
         aContent = resourceBundle.getString("aContent");
 //        UpcomingAppointments.setText(resourceBundle.getString("UpcomingAppointments"));
-//        apptLabel.setText(resourceBundle.getString("apptLabel"));
+        apptLabel.setText(resourceBundle.getString("apptLabel"));
     }
 
     /**This method sets an information alert that can be customized in subsequent methods.
@@ -93,6 +97,7 @@ public class Login implements Initializable {
         return true;
     }
 
+    /**This method checks for any appointments within 15 minutes and displays any relevant appointments in the UI*/
     public void appointmentAlert() throws SQLException {
         ObservableList<Appointment> appointments = DBAppointments.getAllAppointments();
 

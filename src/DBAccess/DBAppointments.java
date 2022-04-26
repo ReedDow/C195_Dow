@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Contact;
+import model.Customer;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -344,6 +345,50 @@ public static void newAppointment(String title, String description, String locat
         } catch (SQLException e) {
             e.printStackTrace();
         }return cList;
+    }
+
+    public static ObservableList<Customer> getCustomerLocation(String customerName){
+        ObservableList<Customer> cList = FXCollections.observableArrayList();
+        try{
+            String sql = "select * "
+                    + "from first_level_divisions f "
+                    + " inner join customers c "
+                    + "on f.Division_ID = c.Division_ID "
+                    + "inner join countries o "
+                    + "on f.Country_ID = o.Country_ID "
+                    + "where Customer_Name = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, customerName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int customerId = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postalCode = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                LocalDateTime time = rs.getTimestamp("Create_Date").toLocalDateTime();
+                String author = rs.getString("Created_By");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                String lastUpdateAuthor = rs.getString("Last_Updated_By");
+                String division = rs.getString("Division");
+                int divisionId = rs.getInt("Division_ID");
+                String country = rs.getString("Country");
+                int countryId = rs.getInt("country_ID");
+
+
+                Customer C = new Customer(customerId, name, address, postalCode, phone, time, author, lastUpdate, lastUpdateAuthor, division, divisionId, country, countryId);
+
+                cList.add(C);
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cList;
     }
 
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.CustomerLocation"
+            prefHeight="180.0" prefWidth="650.0">
+
+    <TableView fx:id="CustTable" layoutX="40" layoutY="50" prefHeight="70.0" prefWidth="565.0">
+        <columns>
+            <TableColumn fx:id="CustId" prefWidth="102.0" text="Customer Id"/>
+            <TableColumn fx:id="Name" prefWidth="108.0" text="Name"/>
+            <TableColumn fx:id="Country" prefWidth="75.0" text="Country"/>
+            <TableColumn fx:id="Division" prefWidth="75.0" text="Division"/>
+            <TableColumn fx:id="Address" prefWidth="100.0" text="Address"/>
+            <TableColumn fx:id="Postal" prefWidth="93.0" text="Postal Code"/>
+        </columns>
+    </TableView>
+    <Label fx:id="CustomerName" layoutX="5.0" layoutY="5.0" text="ScheduleName" textFill="#7c0202">
+        <font>
+            <Font name="System Bold" size="20.0"/>
+        </font>
+    </Label>
+    <Button fx:id="CancelBtn" layoutX="500.0" layoutY="140.0" mnemonicParsing="false" onAction="#cancelClick"
+            prefHeight="25.0" prefWidth="52.0" text="Cancel"/>
+
+</AnchorPane>

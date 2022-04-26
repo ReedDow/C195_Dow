@@ -1,7 +1,6 @@
-package view;
+package controller;
 
 import DBAccess.DBAppointments;
-import controller.Appointments;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,47 +10,51 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MonthType implements Initializable {
+public class CustomerLocation implements Initializable {
+
+    String selectedCustomer;
+
     @FXML
-    private TableView MonthTable;
+    private TableView<Customer> CustTable;
     @FXML
-    private TableColumn Month;
+    private TableColumn<Customer, Integer> CustId;
     @FXML
-    private TableColumn mTotal;
+    private TableColumn<Customer, String> Name;
     @FXML
-    private TableView TypeTable;
+    private TableColumn<Customer, String> Country;
     @FXML
-    private TableColumn Type;
+    private TableColumn<Customer, String> Division;
     @FXML
-    private TableColumn tTotal;
+    private TableColumn<Customer, String> Address;
+    @FXML
+    private TableColumn<Customer, String> Postal;
+    @FXML
+    private Label CustomerName;
+    @FXML
+    private Button CancelBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        selectedCustomer = Appointments.getSelectedCustomer();
 
-        try {
-            MonthTable.setItems(DBAppointments.getMonth());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        CustomerName.setText(selectedCustomer + "'s Location");
 
-        Month.setCellValueFactory(new PropertyValueFactory<>("Month"));
-        mTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
+        CustTable.setItems(DBAppointments.getCustomerLocation(String.valueOf(selectedCustomer)));
 
-
-        try {
-            TypeTable.setItems(DBAppointments.getType());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Type.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        tTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
+        CustId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        Name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        Country.setCellValueFactory(new PropertyValueFactory<>("country"));
+        Division.setCellValueFactory(new PropertyValueFactory<>("division"));
+        Address.setCellValueFactory(new PropertyValueFactory<>("address"));
+        Postal.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        
     }
 
     /**This method sets a confirmation alert that can be customized in subsequent methods.

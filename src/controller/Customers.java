@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class initializes the Customers form, with the customers table and fields*/
 public class Customers implements Initializable{
 
     public Button modify;
@@ -68,6 +69,7 @@ public class Customers implements Initializable{
         CustState.setItems(DBDivisions.getSelectedDivisions(selectedCountry));
     }
 
+    /**This method populates the Customers table and comboboxes*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
@@ -128,9 +130,9 @@ public class Customers implements Initializable{
 
             Customer selectedCustomerId = customerTable.getSelectionModel().getSelectedItem();
 
-//            DBAppointments.deleteAppointment((selectedCustomerId.getCustomerId(CustIdCol)));
-//
-//            DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId(CustIdCol));
+            DBAppointments.deleteAppointment(selectedCustomerId.getCustomerId());
+
+            DBCustomers.deleteCustomer(selectedCustomerId.getCustomerId());
 
             customerTable.setItems(DBCustomers.getAllCustomers());
         }
@@ -149,7 +151,8 @@ public class Customers implements Initializable{
             stage.show();
         }
     }
-
+    /** This method allows the user to add a new customer by inputting data in the fields and clicking "Add"
+     * The method checks for empty fields and alerts the user otherwise.*/
     public void onAddClick(ActionEvent actionEvent) throws IOException, SQLException {
 
         boolean added = false;
@@ -185,6 +188,8 @@ public class Customers implements Initializable{
             }
     }
 
+    /** This method allows the user to modify a customer in the Customer table, and auto-populates the fields
+     * */
     public void onModifyClick(ActionEvent actionEvent) throws IOException, SQLException {
 
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
@@ -201,6 +206,7 @@ public class Customers implements Initializable{
             CustPhone.setText(customer.getPhone());
 
             CustCountry.setItems(DBCountries.getAllCountries());
+
             Country country = null;
             for (Country c : DBCountries.getAllCountries()){
                 if(c.getCountryName().equals(customer.getCountry())){
@@ -219,7 +225,9 @@ public class Customers implements Initializable{
             CustState.getSelectionModel().select(division);
         }
     }
-
+/**This method saves the modified customer data in the fields
+ * it checks for empty fields and alerts the user
+ * The table is updated immediately with the new information*/
     public void onSaveClick(ActionEvent actionEvent) throws IOException {
 
         if(confirm("Warning", "Customer selected for modification", "Would you like to modify selected customer?")) {
@@ -254,7 +262,7 @@ public class Customers implements Initializable{
         }
         }
     }
-
+/**This method directs the view to the Appointments page.*/
     public void scheduleClick(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
         Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
