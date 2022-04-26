@@ -21,12 +21,11 @@ public class DBAppointments {
 
         try {
             String sql =
-//                    "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID and appointments.Appointments_ID=" + aId;
-
                     "SELECT * FROM appointments a" +
                             "INNER JOIN customers c " +
                             "WHERE a.Customer_ID = c.Customer_ID" +
                             " AND a.Appointment_ID = " + aId;
+
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 
@@ -66,7 +65,11 @@ public class DBAppointments {
         ObservableList<Appointment> aList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT appointments.*, User_Name, Contact_Name, Customer_Name FROM appointments, customers, contacts, users WHERE appointments.Customer_ID=customers.Customer_ID and appointments.Contact_ID=contacts.Contact_ID and appointments.User_ID=users.User_ID";
+            String sql = "SELECT appointments.*, User_Name, Contact_Name, " +
+                    "Customer_Name FROM appointments, customers, contacts, " +
+                    "users WHERE appointments.Customer_ID=customers.Customer_ID " +
+                    "and appointments.Contact_ID=contacts.Contact_ID and " +
+                    "appointments.User_ID=users.User_ID";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
@@ -396,7 +399,7 @@ public static void newAppointment(String title, String description, String locat
     public static ObservableList<String> getType() throws SQLException {
         ObservableList<String> tList = FXCollections.observableArrayList();
 
-        String sql = "SELECT type, count(Type) "
+        String sql = "SELECT type, count(Type) AS Total "
                 + "FROM appointments GROUP BY Type";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
@@ -404,25 +407,23 @@ public static void newAppointment(String title, String description, String locat
 
         while(rs.next()){
             tList.add(rs.getString("Type"));
+            tList.add(rs.getString("Total"));
         }
         return tList;
     }
-
-
-
-
 
     public static ObservableList<String> getMonth() throws SQLException {
         ObservableList<String> mList = FXCollections.observableArrayList();
 
         String sql = "SELECT MONTHNAME(Start) AS Month, "
-                + "COUNT(MONTH(Start)) FROM appointments GROUP BY Month";
+                + "COUNT(MONTH(Start)) AS Total FROM appointments GROUP BY Month";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery(sql);
 
         while(rs.next()){
             mList.add(rs.getString("Month"));
+            mList.add(rs.getString("Total"));
         }
         return mList;
     }

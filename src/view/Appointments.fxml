@@ -111,24 +111,10 @@
               </font>
           </Label>
         </top>
-        <left>
-            <TableView fx:id="MonthTable" prefHeight="150.0" prefWidth="200.0">
-                <columns>
-                    <TableColumn fx:id="byMonth" prefWidth="100.0" text="Month"/>
-                    <TableColumn fx:id="mTotal" prefWidth="100.0" text="Total"/>
-                </columns>
-            </TableView>
-        </left>
-        <right>
-            <TableView fx:id="TypeTable"
-
-                       prefHeight="150.0" prefWidth="200.0">
-                <columns>
-                    <TableColumn fx:id="byType" prefWidth="100.0" text="Type"/>
-                    <TableColumn fx:id="tTotal" prefWidth="100.0" text="Total"/>
-                </columns>
-            </TableView>
-        </right>
+        <center>
+          <Button fx:id="CreateReportBtn" mnemonicParsing="false" text="Create Report" onAction="#createReportClick"
+                  BorderPane.alignment="CENTER"/>
+        </center>
     </BorderPane>
     <Label layoutX="601.0" layoutY="562.0" text="Tools" textFill="#7c0202">
         <font>

@@ -31,18 +31,9 @@ public class Appointments implements Initializable {
     private Label ScheduleName;
 
     @FXML
-    private TableColumn tTotal;
-    @FXML
-    private TableColumn byType;
-    @FXML
-    private TableView TypeTable;
-    @FXML
-    public TableColumn mTotal;
-    @FXML
-    private TableColumn byMonth;
-    @FXML
     private DatePicker StartDate;
     @FXML
+
     private DatePicker EndDate;
     @FXML
     private TableView<Appointment> ApptTable;
@@ -131,7 +122,7 @@ public class Appointments implements Initializable {
             ContactList.setItems(DBAppointments.getAllContacts());
         } catch (SQLException e) {
             e.printStackTrace();
-       }
+        }
 
         try {
             Type.setItems(DBAppointments.getAllTypes());
@@ -165,25 +156,8 @@ public class Appointments implements Initializable {
         CustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         UserIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
-        try {
-            MonthTable.setItems(DBAppointments.getMonth());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        byMonth.setCellValueFactory(new PropertyValueFactory<>("Month"));
-        mTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
-
-
-        try {
-            TypeTable.setItems(DBAppointments.getType());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        byType.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        tTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
-
     }
+
 
     /**This method sets an information alert that can be customized in subsequent methods.
      *  * @param title The title of the alert. * @param header the header message of the alert.
@@ -398,23 +372,20 @@ public class Appointments implements Initializable {
     }
 
     public void createReportClick(ActionEvent actionEvent) throws IOException {
+        String stringMonth = "";
+        String stringType = "";
         try {
-            MonthTable.setItems(DBAppointments.getMonth());
-        } catch (SQLException e) {
+            ObservableList<String> reportMonth = DBAppointments.getMonth();
+
+            ObservableList<String> reportType = DBAppointments.getType();
+
+            alert("Report Generated","Total Appointments by Month and Type", "Month: " + reportMonth + "\n" + "Type: " + reportType);
+        }
+
+        catch (SQLException e) {
             e.printStackTrace();
         }
 
-        byMonth.setCellValueFactory(new PropertyValueFactory<>("Month"));
-        mTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
-
-
-        try {
-            TypeTable.setItems(DBAppointments.getType());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        byType.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        tTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
     }
 
 
