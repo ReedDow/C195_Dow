@@ -140,7 +140,7 @@ public class DBCustomers {
         }
         catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return true;
         }
     }
 

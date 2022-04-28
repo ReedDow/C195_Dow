@@ -52,15 +52,6 @@ public class Login implements Initializable {
     @FXML
     private TextField useridInput;
 
-    @FXML
-    private String aTitle;
-
-    @FXML
-    private String aHeader;
-
-    @FXML
-    private String aContent;
-
     /**This method finds the user's location and initializes text language based on location*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -77,10 +68,6 @@ public class Login implements Initializable {
         loginBtn.setText(resourceBundle.getString("loginBtn"));
         passwordInput.setPromptText(resourceBundle.getString("passwordInput"));
         useridInput.setPromptText(resourceBundle.getString("useridInput"));
-        aTitle = resourceBundle.getString("aTitle");
-        aHeader = resourceBundle.getString("aHeader");
-        aContent = resourceBundle.getString("aContent");
-//        UpcomingAppointments.setText(resourceBundle.getString("UpcomingAppointments"));
         apptLabel.setText(resourceBundle.getString("apptLabel"));
     }
 
@@ -89,10 +76,12 @@ public class Login implements Initializable {
      * @param aHeader the header message of the alert.
      * @param aContent the main message of the alert. */
     public boolean alert(String aTitle, String aHeader, String aContent) {
+        Locale locale = Locale.getDefault();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
         Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-        alert1.setTitle(aTitle);
-        alert1.setHeaderText(aHeader);
-        alert1.setContentText(aContent);
+        alert1.setTitle(resourceBundle.getString("aTitle"));
+        alert1.setHeaderText(resourceBundle.getString("aHeader"));
+        alert1.setContentText(resourceBundle.getString("aContent"));
         alert1.showAndWait();
         return true;
     }
@@ -142,7 +131,7 @@ public class Login implements Initializable {
         else{
 
             alert("Error", "Incorrect credentials", "Please try again");
-            return;
+
         }
     }
 }

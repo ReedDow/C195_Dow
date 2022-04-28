@@ -247,7 +247,7 @@ public static void newAppointment(String title, String description, String locat
         }
         catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return true;
         }
     }
 
