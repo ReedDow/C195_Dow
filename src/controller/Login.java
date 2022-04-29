@@ -55,6 +55,7 @@ public class Login implements Initializable {
     /**This method finds the user's location and initializes text language based on location*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+
         try {
             appointmentAlert();
         } catch (SQLException e) {
@@ -68,7 +69,7 @@ public class Login implements Initializable {
         loginBtn.setText(resourceBundle.getString("loginBtn"));
         passwordInput.setPromptText(resourceBundle.getString("passwordInput"));
         useridInput.setPromptText(resourceBundle.getString("useridInput"));
-        apptLabel.setText(resourceBundle.getString("apptLabel"));
+
     }
 
     /**This method sets an information alert that can be customized in subsequent methods.
@@ -100,10 +101,12 @@ public class Login implements Initializable {
                 int apptId = appointment.getAppointmentId();
                 LocalDateTime time = apptStart;
 
-                UpcomingAppointments.setText("Id: " + apptId + " " + "Time: " + time);
-                System.out.println("Id: " + apptId + " " + "Date/Time: " + time);
-            }
-            else { UpcomingAppointments.setText("No appointments within 15 minutes.");
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setTitle(resourceBundle.getString("bTitle"));
+                alert1.setHeaderText(resourceBundle.getString("bHeader"));
+                alert1.setContentText(resourceBundle.getString("bContent") + " " + apptId + " " + time);
+                alert1.showAndWait();
+
             }
         }
     }
