@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -222,14 +223,13 @@ public class Appointments implements Initializable {
 
         if(confirm("Warning", "Appointment with ID : " + appointment.getAppointmentId() + " Type: " + appointment.getType() + " selected for deletion", "Would you like to delete selected appointment? ")) {
 
-//            Appointment selectedAppointmentId = ApptTable.getSelectionModel().getSelectedItem();
+            Appointment appointmentId = ApptTable.getSelectionModel().getSelectedItem();
 
+            DBAppointments.deleteAppointment(appointmentId.getAppointmentId());
 
-            DBAppointments.deleteAppointment(appointment.getAppointmentId());
-
-            ApptTable.setItems(DBAppointments.getAllAppointments());
+           ApptTable.setItems(DBAppointments.getAllAppointments());
         }
-        else{alert("Error", "Unable to delete customer", "Please try again");
+        else{alert("Error", "Unable to delete appointment", "Please try again");
             return;}
     }
     /**Sets radio button to This Week, and updates the appointment table accordingly*/
@@ -330,13 +330,18 @@ public class Appointments implements Initializable {
         ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
                 ZoneId.of("America/New_York"));
 
+        Boolean overlapCheck = checkOverlap(start, LocalDate.from(end));
+
        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
             alert("Error", "Invalid input", "All fields must be filled");
         }
+        if ( !overlapCheck){
+            alert("Error", "Invalid input", "All fields must be filled");
+        }
 
-       else if (startZone.isBefore(startBusinessDay) | startZone.isAfter(endBusinessDay) |
-                endZone.isBefore(startBusinessDay) | endZone.isAfter(endBusinessDay) |
+       else if (startZone.isBefore(startBusinessDay) || startZone.isAfter(endBusinessDay) ||
+                endZone.isBefore(startBusinessDay) || endZone.isAfter(endBusinessDay) ||
                 startZone.isAfter(endZone)) {
             alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
 
@@ -397,43 +402,108 @@ public class Appointments implements Initializable {
  * It checks for empty fields and overlapping appointments and creates an alert if necessary.*/
     public void onSaveClick(ActionEvent actionEvent) throws IOException {
 
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        String startTime = null;
+        String endTime = null;
+
         if(confirm("Warning", "Appointment selected for modification", "Would you like to modify selected appointment?")) {
+
+            boolean added = false;
 
             int appointmentId = Integer.parseInt(ApptId.getText());
             String title = Title.getText();
             String description = Description.getText();
             String location = Location.getText();
             String contact = String.valueOf(Contact.getValue());
-            String startTime = StartTime.getText();
-            String endTime = EndTime.getText();
-            LocalDate startDate = StartDate.getValue();
-            LocalDate endDate = EndDate.getValue();
             String type = String.valueOf(Type.getValue());
             Integer custId = Integer.parseInt(CustId.getValue());
             Integer userId = Integer.parseInt(UserId.getValue());
-            int contactId = DBContacts.getContactId(contact);
+            Integer contactId = DBContacts.getContactId(contact);
 
-            String endStr = (endDate + " " + endTime);
-            String startStr = (startDate + " " + startTime);
+            try {
+                startTime = StartTime.getText();
+                endTime = EndTime.getText();
+                startDate = StartDate.getValue();
+                endDate = EndDate.getValue();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                String endStr = (endDate + " " + endTime);
+                String startStr = (startDate + " " + startTime);
 
-            LocalDateTime start = LocalDateTime.parse(startStr, formatter);
-            LocalDateTime end = LocalDateTime.parse(endStr, formatter);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                start = LocalDateTime.parse(startStr, formatter);
+                end = LocalDateTime.parse(endStr, formatter);
+
+            } catch (DateTimeParseException error) {
+
+                alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
+            }
+
+            ZonedDateTime startZone = ZonedDateTime.of(start, ZoneId.systemDefault());
+            ZonedDateTime endZone = ZonedDateTime.of(end, ZoneId.systemDefault());
+
+            ZonedDateTime startBusinessDay = ZonedDateTime.of(startDate, LocalTime.of(8, 0),
+                    ZoneId.of("America/New_York"));
+            ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
+                    ZoneId.of("America/New_York"));
+
+            Boolean overlapCheck = checkOverlap(start, LocalDate.from(end));
 
             if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null) {
 
                 alert("Error", "Invalid input", "All fields must be filled");
+            }
+            if (!overlapCheck) {
+                alert("Error", "Invalid input", "All fields must be filled");
+            } else if (startZone.isBefore(startBusinessDay) || startZone.isAfter(endBusinessDay) ||
+                    endZone.isBefore(startBusinessDay) || endZone.isAfter(endBusinessDay) ||
+                    startZone.isAfter(endZone)) {
+                alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
+
             } else {
-                DBAppointments.modifyAppointment(appointmentId, title, description, location, contact, type, start, end, custId, userId, contactId);
+                DBAppointments.newAppointment(title, description, location, contact, type, start, end, custId, userId);
+                added = true;
+            }
+
+            if (added) {
+                Parent root = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setTitle("Main form");
+                stage.setScene(scene);
+                stage.show();
             }
         }
     }
 
-    public void checkOverlap(){
+    public Boolean checkOverlap(LocalDateTime start, LocalDate end){
         ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
 
-        System.out.println(appointment);
+        for (Appointment checkOverlap : appointment) {
+
+            LocalDateTime overlapStart = checkOverlap.getStart();
+            LocalDateTime overlapEnd = checkOverlap.getEnd();
+
+            if (overlapStart.equals(start)) {
+                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
+                return false;
+            }
+            if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
+                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
+                return false;
+            }
+            if (overlapStart.isBefore(ChronoLocalDateTime.from(end)) && overlapStart.isAfter(start)) {
+                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
+                return false;
+            }
+            if (overlapEnd.isBefore(ChronoLocalDateTime.from(end)) && overlapEnd.isAfter(start)) {
+                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
+                return false;
+            }else return true;
+        }return true;
     }
 
 /**Upon click this method creates a report in an alert box with data showing total appointments by type and month*/
@@ -444,8 +514,6 @@ public class Appointments implements Initializable {
             ObservableList<String> reportType = DBAppointments.getType();
 
             alert("Report Generated","Total Appointments by Month and Type", "Month: " + reportMonth + "\n" + "Type: " + reportType);
-
-            checkOverlap();
         }
 
         catch (SQLException e) {

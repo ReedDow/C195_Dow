@@ -231,15 +231,15 @@ public static void newAppointment(String title, String description, String locat
         }
     }
 
-    public static Boolean deleteAppointment(Integer selectedCustomerId) throws SQLException {
+    public static Boolean deleteAppointment(Integer selectedAppointmentId) throws SQLException {
 
         try {
             String sql = "DELETE FROM appointments "
-                    + "WHERE Customer_ID = ?";
+                    + "WHERE Appointment_ID = ?";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ps.setInt(1, selectedCustomerId);
+            ps.setInt(1, selectedAppointmentId);
 
             ps.executeUpdate();
 
