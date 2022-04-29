@@ -23,9 +23,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**This class initializes the appointments form */
 public class Appointments implements Initializable {
@@ -215,11 +217,15 @@ public class Appointments implements Initializable {
             alert("Error", "No customer selected", "Please select customer to delete");
             return;
         }
-        if(confirm("Warning", "Customer selected for deletion", "Would you like to delete selected customer and their appointments?")) {
+        Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
 
-            Appointment selectedAppointmentId = ApptTable.getSelectionModel().getSelectedItem();
 
-            DBAppointments.deleteAppointment(selectedAppointmentId.getAppointmentId());
+        if(confirm("Warning", "Appointment with ID : " + appointment.getAppointmentId() + " Type: " + appointment.getType() + " selected for deletion", "Would you like to delete selected appointment? ")) {
+
+//            Appointment selectedAppointmentId = ApptTable.getSelectionModel().getSelectedItem();
+
+
+            DBAppointments.deleteAppointment(appointment.getAppointmentId());
 
             ApptTable.setItems(DBAppointments.getAllAppointments());
         }
@@ -278,33 +284,62 @@ public class Appointments implements Initializable {
     }
     /** Adds a new appointment into the DB and populates onto appointment table.
      * Formats the time/date input from String into LocalDateTime
-     * Checks for empty values and alerts user*/
+     * Checks for empty values and appointments outside of business hours and alerts the user*/
     public void addClick(ActionEvent actionEvent) throws IOException {
         boolean added = false;
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        String startTime = null;
+        String endTime = null;
 
         String title = Title.getText();
         String description = Description.getText();
         String location = Location.getText();
         String contact = String.valueOf(Contact.getValue());
-        String startTime = StartTime.getText();
-        String endTime = EndTime.getText();
-        LocalDate startDate  = StartDate.getValue();
-        LocalDate endDate = EndDate.getValue();
         String type = String.valueOf(Type.getValue());
         Integer custId = Integer.parseInt(CustId.getValue());
         Integer userId = Integer.parseInt(UserId.getValue());
 
-        String endStr = (endDate + " " + endTime);
-        String startStr = (startDate  + " " + startTime);
+        try {  startTime = StartTime.getText();
+            endTime = EndTime.getText();
+            startDate  = StartDate.getValue();
+            endDate = EndDate.getValue();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            String endStr = (endDate + " " + endTime);
+            String startStr = (startDate  + " " + startTime);
 
-        LocalDateTime start = LocalDateTime.parse(startStr, formatter);
-        LocalDateTime end = LocalDateTime.parse(endStr, formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            start = LocalDateTime.parse(startStr, formatter);
+            end = LocalDateTime.parse(endStr, formatter);
+
+        }
+        catch(DateTimeParseException error) {
+
+            alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
+        }
+
+        ZonedDateTime startZone = ZonedDateTime.of(start, ZoneId.systemDefault());
+        ZonedDateTime endZone = ZonedDateTime.of(end, ZoneId.systemDefault());
+
+        ZonedDateTime startBusinessDay = ZonedDateTime.of(startDate, LocalTime.of(8,0),
+                ZoneId.of("America/New_York"));
+        ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
+                ZoneId.of("America/New_York"));
 
        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
             alert("Error", "Invalid input", "All fields must be filled");
+        }
+
+       else if (startZone.isBefore(startBusinessDay) | startZone.isAfter(endBusinessDay) |
+                endZone.isBefore(startBusinessDay) | endZone.isAfter(endBusinessDay) |
+                startZone.isAfter(endZone)) {
+            alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
+
         }
 
         else {
@@ -321,6 +356,7 @@ public class Appointments implements Initializable {
             stage.show();
         }
     }
+
 /**This method populates the fields with appointment information from the selected appointment.
  * If no appointment is selected an error is shown describing the issue. */
     public void updateClick(ActionEvent actionEvent) throws SQLException {
@@ -352,18 +388,11 @@ public class Appointments implements Initializable {
             EndDate.setValue(appointment.getEnd().toLocalDate());
             StartTime.setText(startLocal);
             EndTime.setText(endLocal);
-            CustId.getSelectionModel().select(appointment.getCustomerId());
-
-            User user = null;
-            for (User u : DBUser.getAllUsers()){
-                if(String.valueOf(u.getUserId()).equals(String.valueOf((appointment.getUserId())))){
-                    user = u;
-                }
-            }
-
-            UserId.getSelectionModel().select(String.valueOf(user));
+            CustId.getSelectionModel().select(String.valueOf((appointment.getCustomerId())));
+            UserId.getSelectionModel().select(String.valueOf(appointment.getUserId()));
         }
     }
+
 /**This method saves the modified data in the text fields to the DB and repopulates the table with updated information.
  * It checks for empty fields and overlapping appointments and creates an alert if necessary.*/
     public void onSaveClick(ActionEvent actionEvent) throws IOException {
@@ -400,6 +429,13 @@ public class Appointments implements Initializable {
             }
         }
     }
+
+    public void checkOverlap(){
+        ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
+
+        System.out.println(appointment);
+    }
+
 /**Upon click this method creates a report in an alert box with data showing total appointments by type and month*/
     public void createReportClick(ActionEvent actionEvent) throws IOException {
         try {
@@ -408,16 +444,17 @@ public class Appointments implements Initializable {
             ObservableList<String> reportType = DBAppointments.getType();
 
             alert("Report Generated","Total Appointments by Month and Type", "Month: " + reportMonth + "\n" + "Type: " + reportType);
+
+            checkOverlap();
         }
 
         catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
-
-    public static String getSelectedContact(){return selectedContact;
+    public static String getSelectedContact(){
+        return selectedContact;
     }
 /**This method sets the selected contact to the variable selectedContact for use in ContactSchedule controller*/
     public void contactScheduleClick(ActionEvent actionEvent) throws IOException {
@@ -458,6 +495,4 @@ public class Appointments implements Initializable {
             stage.show();
         }
     }
-
-
 }
