@@ -330,7 +330,7 @@ public class Appointments implements Initializable {
         ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
                 ZoneId.of("America/New_York"));
 
-        Boolean overlapCheck = checkOverlap(start, LocalDate.from(end));
+        Boolean overlapCheck = checkOverlap(start, end);
 
        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
@@ -450,7 +450,7 @@ public class Appointments implements Initializable {
             ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
                     ZoneId.of("America/New_York"));
 
-            Boolean overlapCheck = checkOverlap(start, LocalDate.from(end));
+            Boolean overlapCheck = checkOverlap(start, end);
 
             if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null) {
 
@@ -479,7 +479,7 @@ public class Appointments implements Initializable {
         }
     }
 
-    public Boolean checkOverlap(LocalDateTime start, LocalDate end){
+    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end){
         ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
 
         for (Appointment checkOverlap : appointment) {

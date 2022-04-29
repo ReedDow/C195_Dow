@@ -88,6 +88,8 @@ public class Login implements Initializable {
 
     /**This method checks for any appointments within 15 minutes and displays any relevant appointments in the UI*/
     public void appointmentAlert() throws SQLException {
+        Locale locale = Locale.getDefault();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
         ObservableList<Appointment> appointments = DBAppointments.getAllAppointments();
 
         LocalDateTime add15 = LocalDateTime.now().plusMinutes(15);
