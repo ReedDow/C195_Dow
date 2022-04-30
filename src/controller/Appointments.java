@@ -306,11 +306,11 @@ public class Appointments implements Initializable {
         String contact = String.valueOf(Contact.getValue());
         String type = String.valueOf(Type.getValue());
 
+        contactId = DBAppointments.getContactID(contact);
+
         if (CustId.getValue()!=null) custId = Integer.parseInt(CustId.getValue());
 
         if(UserId.getValue()!=null) userId = Integer.parseInt(UserId.getValue());
-
-        contactId = DBAppointments.getContactID(contact);
 
         try {  startTime = StartTime.getText();
             endTime = EndTime.getText();
@@ -412,17 +412,17 @@ public class Appointments implements Initializable {
         LocalDate endDate = null;
         String startTime = null;
         String endTime = null;
-        int apptId = 0;
+
         int custId = 0;
         int userId = 0;
-        int contactId = 0;
+        int contactId;
 
 
         if(confirm("Warning", "Appointment selected for modification", "Would you like to modify selected appointment?")) {
 
             boolean added = false;
 
-            if (ApptId.getValue()!=null) apptId = Integer.parseInt(ApptId.getValue());
+            int apptId = Integer.parseInt(ApptId.getText());
             String title = Title.getText();
             String description = Description.getText();
             String location = Location.getText();
@@ -465,13 +465,14 @@ public class Appointments implements Initializable {
                 alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
             }
 
-            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
+            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || contact.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
 
                 alert("Error", "Invalid input", "All fields must be filled");
             }
 
             else {
                 DBAppointments.modifyAppointment(apptId, title, description, location, type, start, end, custId, userId, contactId);
+                System.out.println("Got to modifyAppointment DB");
                 added = true;
             }
 

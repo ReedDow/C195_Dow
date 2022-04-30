@@ -207,9 +207,9 @@ public static void newAppointment(String title, String description, String locat
     public static void modifyAppointment(int appointmentId, String title, String description,  String location,  String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
         try{
             String sql = "UPDATE appointments " +
-                    "Set Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, " +
-                    " Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID? " +
-                    "WHERE Appointment_ID =" + appointmentId;
+                    "Set Title= ?, Description= ?, Location= ?, Type= ?, Start= ?, End= ?, Create_Date= ?, Created_By= ?, " +
+                    "Last_Update= ?, Last_Updated_By= ?, Customer_ID= ?, User_ID= ?, Contact_ID = ? " +
+                    "WHERE Appointment_ID = " + appointmentId;
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
@@ -226,6 +226,8 @@ public static void newAppointment(String title, String description, String locat
             ps.setString(11, String.valueOf(custId));
             ps.setString(12, String.valueOf(userId));
             ps.setString(13, String.valueOf(contactId));
+
+            ps.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -286,10 +288,9 @@ public static void newAppointment(String title, String description, String locat
         }return cList;
     }
 
-    public static Integer getContactID(String contactName) {
+    public static Integer getContactID(String contact) {
 
         try {
-            int conId = 0;
 
             String sql = "SELECT Contact_ID "
                     + "FROM contacts "
@@ -297,17 +298,18 @@ public static void newAppointment(String title, String description, String locat
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ps.setString(1, contactName);
+            ps.setString(1, contact);
 
-
+            int conId = 0;
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                conId = rs.getInt("Contact_Name");
-
+                conId = rs.getInt("Contact_ID");
             }
+
             return conId;
+
         }catch (SQLException e) {
             e.printStackTrace();
         }
