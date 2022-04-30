@@ -108,10 +108,30 @@ public class Appointments implements Initializable {
 
     ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
 
-    /**This method populates the appointment table and all comboboxes.
-     * It also initializes the toggle group for radio buttons*/
+    /**This method populates the appointment table and all combo-boxes.
+     * It initializes the toggle group for radio buttons
+     * It uses a lambda expression to disable weekend on the date selectors for start and end date.
+     * The benefit of a lambda expression here is that it can be done within the initialize method, rather than a whole separate method. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        StartDate.setDayCellFactory(p -> new DateCell() {
+            public void updateItem(LocalDate StartDate, boolean disable) {
+                super.updateItem(StartDate, false);
+                setDisable(
+                    StartDate.getDayOfWeek() == DayOfWeek.SATURDAY ||
+                    StartDate.getDayOfWeek() == DayOfWeek.SUNDAY);
+            }
+        });
+        EndDate.setDayCellFactory(p -> new DateCell() {
+            public void updateItem(LocalDate EndDate, boolean disable) {
+                super.updateItem(EndDate, false);
+                setDisable(
+                    EndDate.getDayOfWeek() == DayOfWeek.SATURDAY ||
+                    EndDate.getDayOfWeek() == DayOfWeek.SUNDAY);
+            }
+        });
+
 
         ToggleGroup group = new ToggleGroup();
         WeekAppts.setToggleGroup(group);

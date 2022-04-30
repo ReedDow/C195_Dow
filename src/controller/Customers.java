@@ -208,6 +208,7 @@ public class Customers implements Initializable{
             CustCountry.setItems(DBCountries.getAllCountries());
 
             Country country = null;
+
             for (Country c : DBCountries.getAllCountries()){
                 if(c.getCountryName().equals(customer.getCountry())){
                     country = c;
@@ -217,6 +218,8 @@ public class Customers implements Initializable{
 
             CustState.setItems(DBDivisions.getSelectedDivisions(customer.getCountry()));
             Division division = null;
+
+
             for (Division d : DBDivisions.getAllDivisions()){
                 if(d.getDivisionName().equals(customer.getDivision())){
                     division = d;

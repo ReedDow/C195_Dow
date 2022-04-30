@@ -16,4 +16,6 @@ customer location information.
 •  Additional report 
     - Created a report that shows a selected customer's location information, including country, division, postal code, and address. 
 
+•  Lambda expressions - Appointments.java line 18  and ContactSchedule.java line 63
+
 •  MYSQL Connector driver: mysql-connector-java-8.1.23
