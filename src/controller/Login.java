@@ -56,11 +56,7 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
-        try {
-            appointmentAlert();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
         Locale locale = Locale.getDefault();
         resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
         location.setText(ZoneId.systemDefault().toString());
@@ -69,6 +65,12 @@ public class Login implements Initializable {
         loginBtn.setText(resourceBundle.getString("loginBtn"));
         passwordInput.setPromptText(resourceBundle.getString("passwordInput"));
         useridInput.setPromptText(resourceBundle.getString("useridInput"));
+
+        try {
+            appointmentAlert();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -26,6 +26,7 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -294,15 +295,22 @@ public class Appointments implements Initializable {
         LocalDate endDate = null;
         String startTime = null;
         String endTime = null;
+        int custId = 0;
+        int userId= 0;
+        int contactId = 0;
+
 
         String title = Title.getText();
         String description = Description.getText();
         String location = Location.getText();
         String contact = String.valueOf(Contact.getValue());
         String type = String.valueOf(Type.getValue());
-        Integer custId = Integer.parseInt(CustId.getValue());
-        Integer userId = Integer.parseInt(UserId.getValue());
 
+        if (CustId.getValue()!=null) custId = Integer.parseInt(CustId.getValue());
+
+        if(UserId.getValue()!=null) userId = Integer.parseInt(UserId.getValue());
+
+        contactId = DBAppointments.getContactID(contact);
 
         try {  startTime = StartTime.getText();
             endTime = EndTime.getText();
@@ -316,41 +324,34 @@ public class Appointments implements Initializable {
 
             start = LocalDateTime.parse(startStr, formatter);
             end = LocalDateTime.parse(endStr, formatter);
-
         }
+
         catch(DateTimeParseException error) {
 
             alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
         }
 
-        ZonedDateTime startZone = ZonedDateTime.of(start, ZoneId.systemDefault());
-        ZonedDateTime endZone = ZonedDateTime.of(end, ZoneId.systemDefault());
+        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
 
-        ZonedDateTime startBusinessDay = ZonedDateTime.of(startDate, LocalTime.of(8,0),
-                ZoneId.of("America/New_York"));
-        ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
-                ZoneId.of("America/New_York"));
+            alert("Error", "Invalid input", "All fields must be filled");
+
+            return;
+        }
 
         Boolean overlapCheck = checkOverlap(start, end);
+        Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
-        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
-
-            alert("Error", "Invalid input", "All fields must be filled");
+        if (!overlapCheck) {
+            alert("Error", "Overlapping appointments", "Please schedule appointment when there is no other appointment scheduled");
+            return;
         }
-
-        if ( !overlapCheck){
-            alert("Error", "Invalid input", "All fields must be filled");
-        }
-
-       else if (startZone.isBefore(startBusinessDay) || startZone.isAfter(endBusinessDay) ||
-                endZone.isBefore(startBusinessDay) || endZone.isAfter(endBusinessDay) ||
-                startZone.isAfter(endZone)) {
+        if (!hoursCheck) {
             alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
-
+            return;
         }
 
         else {
-           DBAppointments.newAppointment(title, description, location, contact, type, start, end, custId, userId);
+           DBAppointments.newAppointment(title, description, location, contact, type, start, end, custId, userId, contactId);
             added = true;
         }
 
@@ -371,6 +372,7 @@ public class Appointments implements Initializable {
 
         if(ApptTable.getSelectionModel().isEmpty()) {
             alert("Error", "No appointment selected", "Please select appointment to update");
+            return;
         }
 
         ZonedDateTime start = appointment.getStart().atZone(ZoneOffset.UTC);
@@ -410,20 +412,28 @@ public class Appointments implements Initializable {
         LocalDate endDate = null;
         String startTime = null;
         String endTime = null;
+        int apptId = 0;
+        int custId = 0;
+        int userId = 0;
+        int contactId = 0;
+
 
         if(confirm("Warning", "Appointment selected for modification", "Would you like to modify selected appointment?")) {
 
             boolean added = false;
 
-            int appointmentId = Integer.parseInt(ApptId.getText());
+            if (ApptId.getValue()!=null) apptId = Integer.parseInt(ApptId.getValue());
             String title = Title.getText();
             String description = Description.getText();
             String location = Location.getText();
             String contact = String.valueOf(Contact.getValue());
             String type = String.valueOf(Type.getValue());
-            Integer custId = Integer.parseInt(CustId.getValue());
-            Integer userId = Integer.parseInt(UserId.getValue());
-            Integer contactId = DBContacts.getContactId(contact);
+
+            if (CustId.getValue()!=null) custId = Integer.parseInt(CustId.getValue());
+
+            if(UserId.getValue()!=null) userId = Integer.parseInt(UserId.getValue());
+
+            contactId = DBAppointments.getContactID(contact);
 
             try {
                 startTime = StartTime.getText();
@@ -444,29 +454,24 @@ public class Appointments implements Initializable {
                 alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
             }
 
-            ZonedDateTime startZone = ZonedDateTime.of(start, ZoneId.systemDefault());
-            ZonedDateTime endZone = ZonedDateTime.of(end, ZoneId.systemDefault());
-
-            ZonedDateTime startBusinessDay = ZonedDateTime.of(startDate, LocalTime.of(8, 0),
-                    ZoneId.of("America/New_York"));
-            ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
-                    ZoneId.of("America/New_York"));
-
             Boolean overlapCheck = checkOverlap(start, end);
+            Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
-            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null) {
+            if (!overlapCheck) {
+                alert("Error", "Overlapping appointments", "Please schedule appointment when there is no other appointment scheduled");
+            }
+
+            if (!hoursCheck) {
+                alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
+            }
+
+            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
 
                 alert("Error", "Invalid input", "All fields must be filled");
             }
-            if (!overlapCheck) {
-                alert("Error", "Invalid input", "All fields must be filled");
-            } else if (startZone.isBefore(startBusinessDay) || startZone.isAfter(endBusinessDay) ||
-                    endZone.isBefore(startBusinessDay) || endZone.isAfter(endBusinessDay) ||
-                    startZone.isAfter(endZone)) {
-                alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
 
-            } else {
-                DBAppointments.newAppointment(title, description, location, contact, type, start, end, custId, userId);
+            else {
+                DBAppointments.modifyAppointment(apptId, title, description, location, type, start, end, custId, userId, contactId);
                 added = true;
             }
 
@@ -481,6 +486,10 @@ public class Appointments implements Initializable {
         }
     }
 
+    /**This method checks for overlapping appointments by comparing the new appointment with appointments in the database.
+     * * @param start the LocalDateTime start of the new appointment.
+     * * @param end the LocalDateTime end of the new appointment.
+     * * @return returns true if no conditions are met and false if any condition is met */
     public Boolean checkOverlap(LocalDateTime start, LocalDateTime end){
         ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
 
@@ -490,22 +499,42 @@ public class Appointments implements Initializable {
             LocalDateTime overlapEnd = checkOverlap.getEnd();
 
             if (overlapStart.equals(start)) {
-                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
                 return false;
             }
             if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
-                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
                 return false;
             }
             if (overlapStart.isBefore(ChronoLocalDateTime.from(end)) && overlapStart.isAfter(start)) {
-                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
                 return false;
             }
             if (overlapEnd.isBefore(ChronoLocalDateTime.from(end)) && overlapEnd.isAfter(start)) {
-                alert("Error", "Overlapping Appointments", "Please check that your appointment does not overlap previous appointents");
                 return false;
             }else return true;
         }return true;
+    }
+
+    public Boolean checkBusinessHours(LocalDateTime start, LocalDateTime end, LocalDate startDate, LocalDate endDate) {
+
+
+        ZonedDateTime startZone = ZonedDateTime.of(start, ZoneId.systemDefault());
+        ZonedDateTime endZone = ZonedDateTime.of(end, ZoneId.systemDefault());
+
+        ZonedDateTime startBusinessDay = ZonedDateTime.of(startDate, LocalTime.of(8, 0),
+                ZoneId.of("America/New_York"));
+        ZonedDateTime endBusinessDay = ZonedDateTime.of(endDate, LocalTime.of(22, 0),
+                ZoneId.of("America/New_York"));
+
+
+        if (startZone.isBefore(startBusinessDay) | startZone.isAfter(endBusinessDay) |
+                endZone.isBefore(startBusinessDay) | endZone.isAfter(endBusinessDay) |
+                startZone.isAfter(endZone)) {
+            return false;
+
+        }
+        else {
+            return true;
+        }
+
     }
 
 /**Upon click this method creates a report in an alert box with data showing total appointments by type and month*/

@@ -15,9 +15,12 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import java.awt.ScrollPane?>
+
 <AnchorPane fx:id="ApptAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="749.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Appointments">
+
     <TableView fx:id="ApptTable" layoutX="337.0" layoutY="97.0" prefHeight="316.0" prefWidth="802.0">
       <columns>
           <TableColumn fx:id="ApptIdCol" prefWidth="102.0" text="Appointment ID"/>

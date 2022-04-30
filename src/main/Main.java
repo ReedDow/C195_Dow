@@ -18,7 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        stage.setTitle("Main Form");
+        stage.setTitle("Login Form");
         stage.setScene(new Scene(root, 600, 335 ));
         stage.show();
     }

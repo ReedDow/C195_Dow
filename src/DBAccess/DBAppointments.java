@@ -145,6 +145,7 @@ public class DBAppointments {
         ps.setString(1, startRangeString);
         ps.setString(2, endRangeString);
 
+
         ResultSet rs = ps.executeQuery();
 
         while( rs.next() ) {
@@ -176,7 +177,7 @@ public class DBAppointments {
 
     }
 
-public static void newAppointment(String title, String description, String location, String contact, String type, LocalDateTime start, LocalDateTime end,  int custId, int userId){
+public static void newAppointment(String title, String description, String location, String contact, String type, LocalDateTime start, LocalDateTime end,  int custId, int userId, int contactId){
         try{
             String sql = "INSERT INTO appointments Values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -194,7 +195,7 @@ public static void newAppointment(String title, String description, String locat
             ps.setString(10, DBLogin.getCurrentUser().getUsername());
             ps.setInt(11, custId);
             ps.setInt(12, userId);
-            ps.setInt(13, custId);
+            ps.setInt(13, contactId);
 
             ps.executeUpdate();
         }
@@ -203,7 +204,7 @@ public static void newAppointment(String title, String description, String locat
         }
     }
 
-    public static void modifyAppointment(int appointmentId, String title, String description,  String location, String contact, String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
+    public static void modifyAppointment(int appointmentId, String title, String description,  String location,  String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
         try{
             String sql = "UPDATE appointments " +
                     "Set Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, " +
@@ -255,7 +256,7 @@ public static void newAppointment(String title, String description, String locat
 
         ObservableList<String> cList = FXCollections.observableArrayList();
         try {
-            String sql = "SELECT Type FROM appointments";
+            String sql = "SELECT DISTINCT Type FROM appointments";
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
