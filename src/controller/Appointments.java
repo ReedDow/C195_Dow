@@ -303,6 +303,7 @@ public class Appointments implements Initializable {
         Integer custId = Integer.parseInt(CustId.getValue());
         Integer userId = Integer.parseInt(UserId.getValue());
 
+
         try {  startTime = StartTime.getText();
             endTime = EndTime.getText();
             startDate  = StartDate.getValue();
@@ -332,10 +333,11 @@ public class Appointments implements Initializable {
 
         Boolean overlapCheck = checkOverlap(start, end);
 
-       if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
+        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == null || userId == null ){
 
             alert("Error", "Invalid input", "All fields must be filled");
         }
+
         if ( !overlapCheck){
             alert("Error", "Invalid input", "All fields must be filled");
         }
@@ -367,6 +369,10 @@ public class Appointments implements Initializable {
     public void updateClick(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
 
+        if(ApptTable.getSelectionModel().isEmpty()) {
+            alert("Error", "No appointment selected", "Please select appointment to update");
+        }
+
         ZonedDateTime start = appointment.getStart().atZone(ZoneOffset.UTC);
         ZonedDateTime end = appointment.getEnd().atZone(ZoneOffset.UTC);
 
@@ -377,11 +383,7 @@ public class Appointments implements Initializable {
         String startLocal = lbStart.format(formatter);
         String endLocal = lbEnd.format(formatter);
 
-        if(ApptTable.getSelectionModel().isEmpty()) {
-            alert("Error", "No appointment selected", "Please select appointment to update");
-            return;
-        }
-        else {
+
             ApptId.setText(Integer.toString(appointment.getAppointmentId()));
             Title.setText(appointment.getTitle());
             Description.setText(appointment.getDescription());
@@ -395,7 +397,7 @@ public class Appointments implements Initializable {
             EndTime.setText(endLocal);
             CustId.getSelectionModel().select(String.valueOf((appointment.getCustomerId())));
             UserId.getSelectionModel().select(String.valueOf(appointment.getUserId()));
-        }
+
     }
 
 /**This method saves the modified data in the text fields to the DB and repopulates the table with updated information.
