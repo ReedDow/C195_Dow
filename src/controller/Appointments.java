@@ -349,6 +349,7 @@ public class Appointments implements Initializable {
         catch(DateTimeParseException error) {
 
             alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
+            return;
         }
 
         if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
@@ -472,6 +473,7 @@ public class Appointments implements Initializable {
             } catch (DateTimeParseException error) {
 
                 alert("Error", "Invalid time input", "Time fields requires exact format hh:mm");
+                return;
             }
 
             Boolean overlapCheck = checkOverlap(start, end);
