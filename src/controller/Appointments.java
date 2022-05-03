@@ -236,7 +236,7 @@ public class Appointments implements Initializable {
      * Confirmation message displays before after clicking delete. */
     public void onDeleteClick(ActionEvent actionEvent) throws SQLException {
         if(ApptTable.getSelectionModel().isEmpty()){
-            alert("Error", "No customer selected", "Please select customer to delete");
+            alert("Error", "No appointment selected", "Please select appointment to delete");
             return;
         }
         Appointment appointment = ApptTable.getSelectionModel().getSelectedItem();
@@ -516,24 +516,34 @@ public class Appointments implements Initializable {
     public Boolean checkOverlap(LocalDateTime start, LocalDateTime end){
         ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
 
-        for (Appointment checkOverlap : appointment) {
+        if (appointment.isEmpty()) {
+            return true;
+        }
+            for (Appointment currentAppointments : appointment) {
 
-            LocalDateTime overlapStart = checkOverlap.getStart();
-            LocalDateTime overlapEnd = checkOverlap.getEnd();
+                System.out.println("Current appointments: " + currentAppointments);
 
-            if (overlapStart.equals(start)) {
-                return false;
+                LocalDateTime overlapStart = currentAppointments.getStart();
+                LocalDateTime overlapEnd = currentAppointments.getEnd();
+
+                if (overlapStart.equals(start)) {
+                    System.out.println("1 caught appointment start overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+                    return false;
+
+                }
+                if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
+                    System.out.println("2 caught appointment complete overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+                    return false;
+                }
+                if (overlapStart.isBefore(end) && overlapStart.isAfter(start)) {
+                    System.out.println("1 caught appointment inner overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+                    return false;
+                } else {
+                    System.out.println("No overlap caught. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+                   continue;
+                }
             }
-            if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
-                return false;
-            }
-            if (overlapStart.isBefore(ChronoLocalDateTime.from(end)) && overlapStart.isAfter(start)) {
-                return false;
-            }
-            if (overlapEnd.isBefore(ChronoLocalDateTime.from(end)) && overlapEnd.isAfter(start)) {
-                return false;
-            }else return true;
-        }return true;
+        return true;
     }
 
     public Boolean checkBusinessHours(LocalDateTime start, LocalDateTime end, LocalDate startDate, LocalDate endDate) {
