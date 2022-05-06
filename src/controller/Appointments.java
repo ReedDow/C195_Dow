@@ -361,7 +361,7 @@ public class Appointments implements Initializable {
             return;
         }
 
-        Boolean overlapCheck = checkOverlap(start, end, );
+        Boolean overlapCheck = checkOverlap(start, end, custId );
         Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
         if (!overlapCheck) {
@@ -478,11 +478,11 @@ public class Appointments implements Initializable {
                 return;
             }
 
-            Boolean overlapCheck = checkOverlap(start, end, apptId);
+            Boolean overlapCheck = checkOverlap(start, end, custId);
             Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
             if (!overlapCheck) {
-                alert("Error", "Overlapping appointments", "Please schedule appointment when there is no other appointment scheduled");
+                alert("Error", "Overlapping appointments", "Please schedule appointment when there are no other customer appointments scheduled");
                 return;
             }
 
@@ -513,12 +513,13 @@ public class Appointments implements Initializable {
         }
     }
 
+
     /**This method checks for overlapping appointments by comparing the new appointment with appointments in the database.
      * * @param start the LocalDateTime start of the new appointment.
      * * @param end the LocalDateTime end of the new appointment.
      * * @return returns true if no conditions are met and false if any condition is met */
-    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end, Integer inputApptId) throws SQLException {
-        ObservableList<Appointment> appointment = DBAppointments.getAppointmentOverlap(inputApptId);
+    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end, Integer inputCustomerId) throws SQLException {
+        ObservableList<Appointment> appointment = DBAppointments.getAppointmentOverlap(inputCustomerId);
 
         if (appointment.isEmpty()) {
             return true;
