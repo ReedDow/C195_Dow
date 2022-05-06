@@ -56,6 +56,8 @@ public class ContactSchedule implements Initializable {
 
         ScheduleName.setText(selectedContact + "'s Schedule");
 
+        System.out.println(selectedContact);
+
         ApptTable.setItems(DBAppointments.getContactSchedule(String.valueOf(selectedContact)));
 
         ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));

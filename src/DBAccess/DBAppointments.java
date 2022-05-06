@@ -8,6 +8,7 @@ import model.Contact;
 import model.Customer;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -254,7 +255,53 @@ public static void newAppointment(String title, String description, String locat
         }
     }
 
-    public static ObservableList<String> getAllTypes() throws SQLException {
+    public static ObservableList<Appointment> getAppointmentOverlap( Integer inputCustomerID) throws SQLException {
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
+
+        String sql = "SELECT * " +
+                " FROM appointments AS a " +
+                " INNER JOIN users AS u " +
+                " ON a.User_ID = u.User_ID " +
+                " INNER JOIN contacts AS o " +
+                " ON a.Contact_ID = o.Contact_ID " +
+                " INNER JOIN customers AS c " +
+                " ON a.Customer_ID = c.Customer_ID " +
+                " WHERE a.Customer_ID <> " + inputCustomerID;
+
+
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery(sql);
+
+        while (rs.next()) {
+
+            Integer appointmentId = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String description = rs.getString("Description");
+            String location = rs.getString("Location");
+            String type = rs.getString("Type");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+            LocalDateTime createTime = rs.getTimestamp("Create_Date").toLocalDateTime();
+            String author = rs.getString("Created_by");
+            LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+            String updateAuthor = rs.getString("Last_Updated_By");
+            String customerName = rs.getString("Customer_Name");
+            Integer customerId = rs.getInt("Customer_ID");
+            Integer userId = rs.getInt("User_ID");
+            String userName = rs.getString("User_Name");
+            Integer contactId = rs.getInt("Contact_ID");
+            String contactName = rs.getString("Contact_Name");
+
+            Appointment A = new Appointment(appointmentId, title, description, location, type, start, end, createTime, author, lastUpdate, updateAuthor, customerId, customerName, contactId, contactName, userId, userName);
+            filteredAppts.add(A);
+        }
+
+        ps.close();
+        return filteredAppts;
+    }
+
+        public static ObservableList<String> getAllTypes() throws SQLException {
 
         ObservableList<String> cList = FXCollections.observableArrayList();
         try {
@@ -404,8 +451,9 @@ public static void newAppointment(String title, String description, String locat
                     + "ON a.Customer_ID = c.Customer_ID "
                     + "INNER JOIN users AS u "
                     + "ON a.User_ID = u.User_ID "
-                    + "INNER JOIN contacts "
-                    + "WHERE Contact_Name = ?";
+                    + "INNER JOIN contacts AS o "
+                    + "ON a.Contact_ID = o.Contact_ID "
+                    + "WHERE o.Contact_Name = ?" ;
 
 
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);

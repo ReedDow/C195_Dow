@@ -274,6 +274,9 @@ public class Appointments implements Initializable {
     /**Sets radio button to This Month, and updates the appointment table accordingly*/
 
     public void radioMonthClick(ActionEvent actionEvent) throws SQLException {
+        LocalDateTime localDate = LocalDateTime.now();
+        LocalDateTime month = localDate.plus(1, ChronoUnit.MONTHS);
+        ApptTable.setItems(DBAppointments.getApptTimeRange(LocalDateTime.now(), month));
 
         ApptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -306,7 +309,7 @@ public class Appointments implements Initializable {
     /** Adds a new appointment into the DB and populates onto appointment table.
      * Formats the time/date input from String into LocalDateTime
      * Checks for empty values and appointments outside of business hours and alerts the user*/
-    public void addClick(ActionEvent actionEvent) throws IOException {
+    public void addClick(ActionEvent actionEvent) throws IOException, SQLException {
         boolean added = false;
 
         LocalDateTime start = null;
@@ -359,7 +362,7 @@ public class Appointments implements Initializable {
             return;
         }
 
-        Boolean overlapCheck = checkOverlap(start, end);
+        Boolean overlapCheck = checkOverlap(start, end, custId);
         Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
         if (!overlapCheck) {
@@ -367,7 +370,7 @@ public class Appointments implements Initializable {
             return;
         }
         if (!hoursCheck) {
-            alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
+            alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-10pm");
             return;
         }
 
@@ -425,7 +428,7 @@ public class Appointments implements Initializable {
 
 /**This method saves the modified data in the text fields to the DB and repopulates the table with updated information.
  * It checks for empty fields and overlapping appointments and creates an alert if necessary.*/
-    public void onSaveClick(ActionEvent actionEvent) throws IOException {
+    public void onSaveClick(ActionEvent actionEvent) throws IOException, SQLException {
 
         LocalDateTime start = null;
         LocalDateTime end = null;
@@ -476,15 +479,17 @@ public class Appointments implements Initializable {
                 return;
             }
 
-            Boolean overlapCheck = checkOverlap(start, end);
+            Boolean overlapCheck = checkOverlap(start, end, custId);
             Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
             if (!overlapCheck) {
                 alert("Error", "Overlapping appointments", "Please schedule appointment when there is no other appointment scheduled");
+                return;
             }
 
             if (!hoursCheck) {
-                alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-5pm");
+                alert("Error", "Appointment outside of business hours", "Please create an appointment between 8am-10pm");
+                return;
             }
 
             if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || contact.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
@@ -513,33 +518,31 @@ public class Appointments implements Initializable {
      * * @param start the LocalDateTime start of the new appointment.
      * * @param end the LocalDateTime end of the new appointment.
      * * @return returns true if no conditions are met and false if any condition is met */
-    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end){
-        ObservableList<Appointment> appointment = DBAppointments.getAllAppointments();
+    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end, Integer inputCustomerId) throws SQLException {
+        ObservableList<Appointment> appointment = DBAppointments.getAppointmentOverlap(inputCustomerId);
 
         if (appointment.isEmpty()) {
             return true;
         }
             for (Appointment currentAppointments : appointment) {
 
-                System.out.println("Current appointments: " + currentAppointments);
-
                 LocalDateTime overlapStart = currentAppointments.getStart();
                 LocalDateTime overlapEnd = currentAppointments.getEnd();
 
                 if (overlapStart.equals(start)) {
-                    System.out.println("1 caught appointment start overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+
                     return false;
 
                 }
                 if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
-                    System.out.println("2 caught appointment complete overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+
                     return false;
                 }
                 if (overlapStart.isBefore(end) && overlapStart.isAfter(start)) {
-                    System.out.println("1 caught appointment inner overlap. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+
                     return false;
                 } else {
-                    System.out.println("No overlap caught. New appointment start: " + start + ", end: " + end + "\n" + "Old appointment start: " + overlapStart + ", end: " + overlapEnd);
+
                    continue;
                 }
             }
@@ -558,11 +561,10 @@ public class Appointments implements Initializable {
                 ZoneId.of("America/New_York"));
 
 
-        if (startZone.isBefore(startBusinessDay) | startZone.isAfter(endBusinessDay) |
-                endZone.isBefore(startBusinessDay) | endZone.isAfter(endBusinessDay) |
+        if (startZone.isBefore(startBusinessDay) || startZone.isAfter(endBusinessDay) ||
+                endZone.isBefore(startBusinessDay) || endZone.isAfter(endBusinessDay) ||
                 startZone.isAfter(endZone)) {
             return false;
-
         }
         else {
             return true;
