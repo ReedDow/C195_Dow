@@ -255,7 +255,7 @@ public static void newAppointment(String title, String description, String locat
         }
     }
 
-    public static ObservableList<Appointment> getAppointmentOverlap( Integer inputCustomerID) throws SQLException {
+    public static ObservableList<Appointment> getAppointmentOverlap( Integer inputApptID) throws SQLException {
         ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
 
         String sql = "SELECT * " +
@@ -266,7 +266,7 @@ public static void newAppointment(String title, String description, String locat
                 " ON a.Contact_ID = o.Contact_ID " +
                 " INNER JOIN customers AS c " +
                 " ON a.Customer_ID = c.Customer_ID " +
-                " WHERE a.Customer_ID <> " + inputCustomerID;
+                " WHERE a.Appointment_ID <> " + inputApptID;
 
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);

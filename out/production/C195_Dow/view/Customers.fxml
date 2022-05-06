@@ -49,9 +49,9 @@
                 <ComboBox fx:id="CustState" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1"  GridPane.rowIndex="6"/>
             </children>
         </GridPane>
-        <Label layoutX="31.0" layoutY="34.0" text="Customer">
+        <Label layoutX="29.0" layoutY="28.0" text="Customers" textFill="#7c0202">
             <font>
-                <Font name="System Bold" size="13.0" />
+                <Font name="System Bold" size="20.0"/>
             </font>
         </Label>
         <Button layoutX="682.0" layoutY="34.0" mnemonicParsing="false" onAction="#scheduleClick" text="Go to Appointments"  />

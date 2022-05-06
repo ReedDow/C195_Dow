@@ -358,11 +358,10 @@ public class Appointments implements Initializable {
         if (title.isEmpty() || description.isEmpty() || location.isEmpty() || startDate == null || startTime.isEmpty() || endTime.isEmpty() || endDate == null || type.isEmpty() || custId == 0 || userId == 0) {
 
             alert("Error", "Invalid input", "All fields must be filled");
-
             return;
         }
 
-        Boolean overlapCheck = checkOverlap(start, end, custId);
+        Boolean overlapCheck = checkOverlap(start, end, );
         Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
         if (!overlapCheck) {
@@ -479,7 +478,7 @@ public class Appointments implements Initializable {
                 return;
             }
 
-            Boolean overlapCheck = checkOverlap(start, end, custId);
+            Boolean overlapCheck = checkOverlap(start, end, apptId);
             Boolean hoursCheck = checkBusinessHours(start, end, startDate, endDate);
 
             if (!overlapCheck) {
@@ -518,8 +517,8 @@ public class Appointments implements Initializable {
      * * @param start the LocalDateTime start of the new appointment.
      * * @param end the LocalDateTime end of the new appointment.
      * * @return returns true if no conditions are met and false if any condition is met */
-    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end, Integer inputCustomerId) throws SQLException {
-        ObservableList<Appointment> appointment = DBAppointments.getAppointmentOverlap(inputCustomerId);
+    public Boolean checkOverlap(LocalDateTime start, LocalDateTime end, Integer inputApptId) throws SQLException {
+        ObservableList<Appointment> appointment = DBAppointments.getAppointmentOverlap(inputApptId);
 
         if (appointment.isEmpty()) {
             return true;
@@ -527,12 +526,12 @@ public class Appointments implements Initializable {
             for (Appointment currentAppointments : appointment) {
 
                 LocalDateTime overlapStart = currentAppointments.getStart();
+
                 LocalDateTime overlapEnd = currentAppointments.getEnd();
 
                 if (overlapStart.equals(start)) {
 
                     return false;
-
                 }
                 if (overlapStart.isBefore(start) && overlapEnd.isAfter(start)) {
 
