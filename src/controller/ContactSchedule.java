@@ -88,6 +88,8 @@ public class ContactSchedule implements Initializable {
         else return false;
     }
 
+
+
     /**This method redirects to the previous page after a confirmation dialog returns true upon "OK" click */
     public void cancelClick(ActionEvent actionEvent) throws IOException {
         if(confirm("Warning", "Leaving page", "Would you like to leave this page?")){

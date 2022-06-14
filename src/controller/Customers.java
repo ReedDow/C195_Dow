@@ -5,6 +5,8 @@ import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBDivisions;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -151,6 +153,31 @@ public class Customers implements Initializable{
             stage.show();
         }
     }
+
+    /**This method compares input name or id with parts and displays matches.
+     * Displays alert if text field is empty.
+     * Regex allows for partial name match to display
+     * After search, if text field is empty, it repopulates with full list of parts.*/
+//    public void partSearchButton(ActionEvent actionEvent) {
+//
+//        ObservableList<Customer> allCustomers = DBCustomers.getCustomerNames();
+//        ObservableList<Customer> customerSearchResults = FXCollections.observableArrayList();
+//        String search = mainpartssearch.getText();
+//
+//        for (Part part : allParts) {
+//            if (String.valueOf(part.getId()).contains(search) ||
+//                    String.valueOf(part.getName()).matches(("(?i:.*" + search + ".*)"))) {
+//                partSearchResults.add(part);
+//            }
+//        }
+//        mainpartstable.setItems(partSearchResults);
+//
+//        if(partSearchResults.isEmpty()) {
+//            alert("No part found", "Your search for " + '"' + search + '"' + " was not found", "Please try another search");
+//            mainpartstable.refresh();
+//        }
+//    }
+
     /** This method allows the user to add a new customer by inputting data in the fields and clicking "Add"
      * The method checks for empty fields and alerts the user otherwise.*/
     public void onAddClick(ActionEvent actionEvent) throws IOException, SQLException {
@@ -228,6 +255,7 @@ public class Customers implements Initializable{
             CustState.getSelectionModel().select(division);
         }
     }
+
 /**This method saves the modified customer data in the fields
  * it checks for empty fields and alerts the user
  * The table is updated immediately with the new information*/
