@@ -59,7 +59,8 @@ public class Login implements Initializable {
 
         Locale locale = Locale.getDefault();
         resourceBundle = ResourceBundle.getBundle("languageResource/login", locale.getDefault());
-        location.setText(ZoneId.systemDefault().toString());
+        location.setText(String.valueOf(ZoneId.systemDefault()));
+        System.out.println(ZoneId.systemDefault());
         LabelLocation.setText(resourceBundle.getString("labelLocation"));
         title.setText(resourceBundle.getString("title"));
         loginBtn.setText(resourceBundle.getString("loginBtn"));

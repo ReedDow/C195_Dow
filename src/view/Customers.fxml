@@ -12,10 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.ComboBox?>
 
-
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<AnchorPane fx:id="CustomerAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="567.0" prefWidth="900.0"
+<AnchorPane fx:id="CustomerAnchor" style="-fx-background-color: powderblue;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="567.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.Customers">
@@ -49,6 +46,8 @@
                 <ComboBox fx:id="CustState" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1"  GridPane.rowIndex="6"/>
             </children>
         </GridPane>
+        <TextField fx:id="CustSearch" prefHeight="25.0" prefWidth="142.0" layoutX="330" layoutY="36"/>
+        <Button onAction="#customerSearchButton" layoutX="470.0" layoutY="36.0" mnemonicParsing="false" text="Search"/>
         <Label layoutX="29.0" layoutY="28.0" text="Customers" textFill="#7c0202">
             <font>
                 <Font name="System Bold" size="20.0"/>

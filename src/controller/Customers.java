@@ -33,6 +33,8 @@ public class Customers implements Initializable{
 
     public Button modify;
     @FXML
+    private TextField CustSearch;
+    @FXML
     private TableView<Customer> customerTable;
     @FXML
     private TableColumn<Customer, Integer> CustIdCol;
@@ -154,29 +156,29 @@ public class Customers implements Initializable{
         }
     }
 
-    /**This method compares input name or id with parts and displays matches.
+    /**This method compares input name or id with customers and displays matches.
      * Displays alert if text field is empty.
      * Regex allows for partial name match to display
      * After search, if text field is empty, it repopulates with full list of parts.*/
-//    public void partSearchButton(ActionEvent actionEvent) {
-//
-//        ObservableList<Customer> allCustomers = DBCustomers.getCustomerNames();
-//        ObservableList<Customer> customerSearchResults = FXCollections.observableArrayList();
-//        String search = mainpartssearch.getText();
-//
-//        for (Part part : allParts) {
-//            if (String.valueOf(part.getId()).contains(search) ||
-//                    String.valueOf(part.getName()).matches(("(?i:.*" + search + ".*)"))) {
-//                partSearchResults.add(part);
-//            }
-//        }
-//        mainpartstable.setItems(partSearchResults);
-//
-//        if(partSearchResults.isEmpty()) {
-//            alert("No part found", "Your search for " + '"' + search + '"' + " was not found", "Please try another search");
-//            mainpartstable.refresh();
-//        }
-//    }
+    public void customerSearchButton(ActionEvent actionEvent) {
+
+        ObservableList<Customer> allCustomers = DBCustomers.getAllCustomers();
+        ObservableList<Customer> customerSearchResults = FXCollections.observableArrayList();
+        String search = CustSearch.getText();
+
+        for (Customer customer : allCustomers) {
+            if (String.valueOf(customer.getCustomerId()).contains(search) ||
+                    String.valueOf(customer.getName()).matches(("(?i:.*" + search + ".*)"))) {
+                customerSearchResults.add(customer);
+            }
+        }
+        customerTable.setItems(customerSearchResults);
+
+        if(customerSearchResults.isEmpty()) {
+            alert("No customer found", "Your search for " + '"' + search + '"' + " was not found", "Please try another search");
+            customerTable.refresh();
+        }
+    }
 
     /** This method allows the user to add a new customer by inputting data in the fields and clicking "Add"
      * The method checks for empty fields and alerts the user otherwise.*/
