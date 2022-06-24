@@ -12,7 +12,7 @@
    <TextField fx:id="passwordInput" layoutX="226.0" layoutY="213.0" prefHeight="22.0" prefWidth="149.0"
               promptText="Password"/>
    <TextField fx:id="useridInput" layoutX="226.0" layoutY="175.0" promptText="User Name"/>
-   <Label fx:id="title" layoutX="140.0" layoutY="43.0" text="Therappointment Pro" textFill="#800000">
+   <Label fx:id="title" layoutX="140.0" layoutY="43.0" text="Therappointment Pro" textFill="#273746">
       <font>
          <Font size="35.0"/>
       </font>

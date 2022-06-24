@@ -48,7 +48,7 @@
         </GridPane>
         <TextField fx:id="CustSearch" prefHeight="25.0" prefWidth="142.0" layoutX="330" layoutY="36"/>
         <Button onAction="#customerSearchButton" layoutX="470.0" layoutY="36.0" mnemonicParsing="false" text="Search"/>
-        <Label layoutX="29.0" layoutY="28.0" text="Customers" textFill="#7c0202">
+        <Label layoutX="29.0" layoutY="28.0" text="Customers" textFill="#273746">
             <font>
                 <Font name="System Bold" size="20.0"/>
             </font>
