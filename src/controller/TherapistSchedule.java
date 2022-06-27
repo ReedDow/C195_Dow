@@ -12,16 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
-import model.Contact;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.ZoneId;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**This class initializes the contact schedule page*/
-public class ContactSchedule implements Initializable {
+public class TherapistSchedule implements Initializable {
 
     public Button CancelBtn;
     public Label ScheduleName;

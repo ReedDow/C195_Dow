@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
-public class Contact {
+public class Therapist {
 
     private int appointmentId;
     private String contactName;
@@ -14,12 +14,12 @@ public class Contact {
     private int customerId;
 
 
-    public Contact(int appointmentId, String title, int customerId, String description, String type, LocalDateTime end, LocalDateTime start){
+    public Therapist(int appointmentId, String title, int customerId, String description, String type, LocalDateTime end, LocalDateTime start){
         appointmentId = appointmentId;
 
     }
 
-    public Contact() {
+    public Therapist() {
 
     }
 

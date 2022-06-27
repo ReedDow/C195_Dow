@@ -4,15 +4,12 @@ import Database.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
-import model.Contact;
 import model.Customer;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DBAppointments {

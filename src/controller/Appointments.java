@@ -12,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -22,14 +21,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 /**This class initializes the appointments form */
 public class Appointments implements Initializable {
@@ -635,7 +631,7 @@ public class Appointments implements Initializable {
 
         selectedContact = String.valueOf(ContactList.getValue());
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ContactSchedule.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/TherapistSchedule.fxml"));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setTitle("Contact Schedule");
