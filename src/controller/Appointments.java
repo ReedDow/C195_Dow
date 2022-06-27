@@ -347,6 +347,8 @@ public class Appointments implements Initializable {
 
             start = LocalDateTime.parse(startStr, formatter);
             end = LocalDateTime.parse(endStr, formatter);
+            System.out.println(start);
+            System.out.println(startDate);
         }
 
         catch(DateTimeParseException error) {
@@ -470,6 +472,7 @@ public class Appointments implements Initializable {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
                 start = LocalDateTime.parse(startStr, formatter);
+
                 end = LocalDateTime.parse(endStr, formatter);
 
             } catch (DateTimeParseException error) {
@@ -609,11 +612,12 @@ public class Appointments implements Initializable {
     }
 
 /**Upon click this method creates a report in an alert box with data showing total appointments by type and month*/
-    public void createReportClick(ActionEvent actionEvent) throws IOException {
+    public void createReportClick() throws IOException {
         try {
             ObservableList<String> reportMonth = DBAppointments.getMonth();
 
             ObservableList<String> reportType = DBAppointments.getType();
+
 
             alert("Report Generated","Total Appointments by Month and Type", "Month: " + reportMonth + "\n" + "Type: " + reportType);
         }

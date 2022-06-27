@@ -42,6 +42,10 @@ public class Appointment {
         user = aUser;
     }
 
+    public Appointment() {
+
+    }
+
     /**Get method for appt id*/
     public int getAppointmentId(
     ){ return appointmentId;}

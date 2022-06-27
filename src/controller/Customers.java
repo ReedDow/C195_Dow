@@ -160,7 +160,7 @@ public class Customers implements Initializable{
      * Displays alert if text field is empty.
      * Regex allows for partial name match to display
      * After search, if text field is empty, it repopulates with full list of parts.*/
-    public void customerSearchButton(ActionEvent actionEvent) {
+    public void customerSearchButton() {
 
         ObservableList<Customer> allCustomers = DBCustomers.getAllCustomers();
         ObservableList<Customer> customerSearchResults = FXCollections.observableArrayList();
